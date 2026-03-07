@@ -139,6 +139,8 @@
     .inp.big{font-family:'Syne',sans-serif;font-size:30px;font-weight:800}
     select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(238,238,248,0.4)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer}
     .wbox{background:rgba(255,69,69,.1);border:1px solid rgba(255,69,69,.3);border-radius:12px;padding:11px 14px;margin-bottom:14px;font-size:12px;color:var(--rd);line-height:1.5;display:none}
+    input[type="date"].inp{color-scheme:dark;cursor:pointer}
+    input[type="date"].inp::-webkit-calendar-picker-indicator{filter:invert(0.7);cursor:pointer}
     .sbtn{width:100%;background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;border-radius:15px;padding:16px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 8px 24px rgba(108,99,255,.3);margin-top:4px}
     .sbtn:disabled{opacity:.5}
 
@@ -297,6 +299,8 @@
     <div class="wbox" id="budWarn"></div>
     <label class="lbl">Amount (₹)</label>
     <input class="inp big" id="addAmt" type="number" inputmode="decimal" placeholder="0"/>
+    <label class="lbl">Date</label>
+    <input class="inp" id="addDate" type="date"/>
     <label class="lbl">Sub Category</label>
     <select class="inp" id="subSel"><option value="">— Select sub-category —</option></select>
     <label class="lbl">Payment Mode</label>
@@ -885,6 +889,12 @@ function openAdd(){
   document.getElementById('addAmt').value='';
   document.getElementById('addNotes').value='';
   document.getElementById('budWarn').style.display='none';
+  // default date to today
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  document.getElementById('addDate').value = `${yyyy}-${mm}-${dd}`;
   setType('expense');
   buildPaySel();
   document.getElementById('addOv').classList.add('open');
@@ -964,7 +974,7 @@ async function saveTx(){
   const payId=document.getElementById('paySel').value;
   const payNm=S.payments.find(p=>p.id===payId)?.name||'';
   const tx={
-    date:new Date().toISOString(), type:txType,
+    date: (()=>{ const d=document.getElementById('addDate').value; return d ? new Date(d+'T12:00:00').toISOString() : new Date().toISOString(); })(), type:txType,
     majorCategory:majorCat, subCategory:subCat,
     paymentMode:payNm, amount:amt,
     notes:document.getElementById('addNotes').value.trim()
