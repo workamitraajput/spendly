@@ -451,8 +451,20 @@ async function connect(){
 // ════════════════════════════════
 //  API
 // ════════════════════════════════
-async function GET(p){ const r=await fetch(URL_+'?'+new URLSearchParams(p)); return r.json(); }
-async function POST(b){ const r=await fetch(URL_,{method:'POST',body:JSON.stringify(b),headers:{'Content-Type':'application/json'}}); return r.json(); }
+async function GET(p){
+  const r=await fetch(URL_+'?'+new URLSearchParams(p),{redirect:'follow'});
+  return r.json();
+}
+async function POST(b){
+  // Apps Script requires text/plain (not application/json) to avoid CORS preflight errors
+  const r=await fetch(URL_,{
+    method:'POST',
+    body:JSON.stringify(b),
+    headers:{'Content-Type':'text/plain'},
+    redirect:'follow'
+  });
+  return r.json();
+}
 
 // ════════════════════════════════
 //  SYNC
