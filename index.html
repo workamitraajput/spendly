@@ -111,7 +111,7 @@
     .balert.ov{background:rgba(255,69,69,.1);color:var(--rd)}
 
     /* NAV */
-    .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:8px 20px calc(var(--sb)+8px);background:linear-gradient(0deg,#06060f 75%,transparent);display:flex;justify-content:space-around;align-items:center;z-index:20}
+    .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:8px 12px calc(var(--sb)+8px);background:linear-gradient(0deg,#06060f 75%,transparent);display:grid;grid-template-columns:1fr auto 1fr 1fr;align-items:center;gap:4px;z-index:20}
     .nv{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--mt);font-size:10px;cursor:pointer;padding:8px 14px;border-radius:12px}
     .nv.on{color:var(--ac)}
     .nv svg{width:21px;height:21px}
@@ -141,6 +141,57 @@
     .wbox{background:rgba(255,69,69,.1);border:1px solid rgba(255,69,69,.3);border-radius:12px;padding:11px 14px;margin-bottom:14px;font-size:12px;color:var(--rd);line-height:1.5;display:none}
     input[type="date"].inp{color-scheme:dark;cursor:pointer}
     input[type="date"].inp::-webkit-calendar-picker-indicator{filter:invert(0.7);cursor:pointer}
+
+    /* ── DASHBOARD ── */
+    .dash-period-row{display:flex;gap:7px;margin:12px 0 4px;overflow-x:auto;padding-bottom:2px}
+    .dash-period-row::-webkit-scrollbar{display:none}
+    .period-btn{flex-shrink:0;background:var(--s1);border:1px solid var(--b);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--mt);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif}
+    .period-btn.on{background:var(--ac);border-color:var(--ac);color:#fff}
+    .dash-view-row{display:flex;gap:7px;margin:8px 0 0}
+    .dview-btn{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:11px;padding:9px;font-size:12px;font-weight:600;color:var(--mt);cursor:pointer;font-family:'DM Sans',sans-serif}
+    .dview-btn.on{background:var(--ac);border-color:var(--ac);color:#fff}
+
+    /* major category card */
+    .dash-major{background:var(--s1);border:1px solid var(--b);border-radius:18px;margin-bottom:10px;overflow:hidden}
+    .dash-major-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
+    .dash-major-head:active{background:var(--s2)}
+    .dash-mico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .dash-minfo{flex:1;min-width:0}
+    .dash-mname{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+    .dash-mamt{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;flex-shrink:0;color:var(--ac2)}
+    .dash-mpct{font-size:11px;color:var(--mt);margin-top:1px}
+    .dash-chevron{font-size:12px;color:var(--mt);transition:transform .25s;flex-shrink:0;margin-left:4px}
+    .dash-chevron.open{transform:rotate(180deg)}
+
+    /* progress bar inside card */
+    .dash-bar-wrap{padding:0 16px 14px}
+    .dash-bar-bg{height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
+    .dash-bar-fill{height:100%;border-radius:3px}
+
+    /* sub-category rows (collapsed by default) */
+    .dash-subs{display:none;border-top:1px solid var(--b);padding:8px 0 4px}
+    .dash-subs.open{display:block}
+    .dash-sub-row{display:flex;align-items:center;gap:10px;padding:9px 16px}
+    .dash-sub-row:not(:last-child){border-bottom:1px solid rgba(255,255,255,0.04)}
+    .dash-sub-ico{font-size:16px;width:24px;text-align:center;flex-shrink:0}
+    .dash-sub-info{flex:1;min-width:0}
+    .dash-sub-nm{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dash-sub-bar{height:4px;background:var(--s3);border-radius:2px;overflow:hidden;margin-top:4px}
+    .dash-sub-bar-fill{height:100%;border-radius:2px;opacity:.8}
+    .dash-sub-amt{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--mt);flex-shrink:0}
+    .dash-sub-pct{font-size:10px;color:var(--mt);flex-shrink:0;margin-left:6px;min-width:32px;text-align:right}
+
+    /* summary donut-style ring (CSS only) */
+    .dash-total-card{background:linear-gradient(135deg,#140d2e,#0d0d1f);border:1px solid rgba(108,99,255,.2);border-radius:18px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:center;gap:16px}
+    .dash-ring{position:relative;width:64px;height:64px;flex-shrink:0}
+    .dash-ring svg{width:64px;height:64px;transform:rotate(-90deg)}
+    .dash-ring-bg{fill:none;stroke:var(--s3);stroke-width:6}
+    .dash-ring-fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+    .dash-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--mt)}
+    .dash-total-info{flex:1}
+    .dash-total-title{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mt);margin-bottom:4px}
+    .dash-total-amt{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:-1px}
+    .dash-total-sub{font-size:12px;color:var(--mt);margin-top:2px}
     .sbtn{width:100%;background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;border-radius:15px;padding:16px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 8px 24px rgba(108,99,255,.3);margin-top:4px}
     .sbtn:disabled{opacity:.5}
 
@@ -255,6 +306,7 @@
     </div>
     <div class="tabs">
       <button class="tab on" id="tabTx" onclick="switchTab('tx')">Transactions</button>
+      <button class="tab" id="tabDash" onclick="switchTab('dash')">Dashboard</button>
       <button class="tab" id="tabBud" onclick="switchTab('bud')">Budget</button>
     </div>
   </div>
@@ -265,6 +317,22 @@
       <div class="chips" id="filterChips"></div>
       <div class="sec">This Month</div>
       <div class="txl" id="txList"></div>
+    </div>
+    <div id="vDash" style="display:none">
+      <div class="dash-header">
+        <div class="dash-period-row">
+          <button class="period-btn on" id="pb0" onclick="setPeriod('month')">This Month</button>
+          <button class="period-btn" id="pb1" onclick="setPeriod('3month')">3 Months</button>
+          <button class="period-btn" id="pb2" onclick="setPeriod('year')">This Year</button>
+        </div>
+        <div class="dash-view-row">
+          <button class="dview-btn on" id="dv0" onclick="setDashView('category')">📦 Category</button>
+          <button class="dview-btn" id="dv1" onclick="setDashView('payment')">💳 Payment</button>
+        </div>
+      </div>
+      <div id="dashSecLabel" class="sec">Expense by Category</div>
+      <div id="dashGrid"></div>
+      <div style="height:110px"></div>
     </div>
     <div id="vBud" style="display:none">
       <div class="sec">Monthly Budget vs Spent</div>
@@ -279,6 +347,10 @@
     </button>
     <button class="fab" id="fabBtn">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 4v16m8-8H4" stroke-linecap="round"/></svg>
+    </button>
+    <button class="nv" id="nvDash" onclick="switchTab('dash')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Analysis
     </button>
     <button class="nv" id="nvBud" onclick="switchTab('bud')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -507,7 +579,7 @@ function setSyn(c,l){
 // ════════════════════════════════
 //  RENDER
 // ════════════════════════════════
-function renderAll(){ renderBal(); renderChips(); renderTxList(); renderBudGrid(); }
+function renderAll(){ renderBal(); renderChips(); renderTxList(); renderBudGrid(); if(curTab==='dash') renderDash(); }
 
 function renderBal(){
   const txs=S.transactions.filter(t=>inMonth(t.date));
@@ -1015,15 +1087,447 @@ async function delTx(id){
 // ════════════════════════════════
 //  TABS
 // ════════════════════════════════
+// ════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════
+let dashPeriod='month';
+
+function setPeriod(p){
+  dashPeriod=p;
+  ['month','3month','year'].forEach((k,i)=>{
+    document.getElementById('pb'+i).className='period-btn'+(k===p?' on':'');
+  });
+  renderDash();
+}
+
+function getDashTxs(){
+  const now=new Date();
+  return S.transactions.filter(t=>{
+    if(t.type!=='expense') return false;
+    const d=new Date(t.date);
+    if(dashPeriod==='month'){
+      return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+    } else if(dashPeriod==='3month'){
+      const cutoff=new Date(now.getFullYear(),now.getMonth()-2,1);
+      return d>=cutoff;
+    } else {
+      return d.getFullYear()===now.getFullYear();
+    }
+  });
+}
+
+function periodLabel(){
+  const now=new Date();
+  if(dashPeriod==='month') return now.toLocaleString('en-IN',{month:'long',year:'numeric'});
+  if(dashPeriod==='3month') return 'Last 3 Months';
+  return 'Year '+now.getFullYear();
+}
+
+function safeId(s){ return s.replace(/[^a-zA-Z0-9]/g,'_'); }
+
+let dashView='category'; // 'category' | 'payment'
+let expandedPays=new Set();
+
+function setDashView(v){
+  dashView=v;
+  document.getElementById('dv0').className='dview-btn'+(v==='category'?' on':'');
+  document.getElementById('dv1').className='dview-btn'+(v==='payment'?' on':'');
+  document.getElementById('dashSecLabel').textContent = v==='category'?'Expense by Category':'Expense by Payment Mode';
+  renderDash();
+}
+
+function renderDash(){
+  if(dashView==='payment') renderDashPayment();
+  else renderDashCategory();
+}
+
+// ── CATEGORY VIEW ──
+function renderDashCategory(){
+  const txs=getDashTxs();
+  const totalExp=txs.reduce((a,t)=>a+t.amount,0);
+  const el=document.getElementById('dashGrid');
+
+  if(!txs.length){
+    el.innerHTML=`<div class="empty"><div class="empty-ico">📊</div><div class="empty-nm">No expense data</div><div>Add transactions to see analysis</div></div>`;
+    return;
+  }
+
+  // Aggregate by major → sub
+  const byMajor={};
+  txs.forEach(t=>{
+    const m=t.majorCategory||'Other';
+    if(!byMajor[m]) byMajor[m]={total:0,subs:{}};
+    byMajor[m].total+=t.amount;
+    const s=t.subCategory||m;
+    byMajor[m].subs[s]=(byMajor[m].subs[s]||0)+t.amount;
+  });
+
+  const sortedMajors=Object.entries(byMajor).sort((a,b)=>b[1].total-a[1].total);
+  const circumference=2*Math.PI*28;
+
+  // Summary card
+  let html=`<div class="dash-total-card">
+    <div class="dash-ring">
+      <svg viewBox="0 0 64 64">
+        <circle class="dash-ring-bg" cx="32" cy="32" r="28"/>
+        <circle class="dash-ring-fill" cx="32" cy="32" r="28"
+          stroke="url(#dgr)" stroke-dasharray="${circumference.toFixed(1)}"
+          stroke-dashoffset="${(circumference*0.15).toFixed(1)}"/>
+        <defs><linearGradient id="dgr" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#6c63ff"/>
+          <stop offset="100%" stop-color="#ff5f7e"/>
+        </linearGradient></defs>
+      </svg>
+      <div class="dash-ring-label">${sortedMajors.length}<br><span style="font-size:9px">cats</span></div>
+    </div>
+    <div class="dash-total-info">
+      <div class="dash-total-title">Total Expenses · ${periodLabel()}</div>
+      <div class="dash-total-amt cr">₹${fmt(totalExp)}</div>
+      <div class="dash-total-sub">${txs.length} txn${txs.length!==1?'s':''} · ${sortedMajors.length} categor${sortedMajors.length!==1?'ies':'y'}</div>
+    </div>
+  </div>`;
+
+  sortedMajors.forEach(([major,data])=>{
+    const cat=S.categories[major];
+    const color=cat?.color||'#6c63ff';
+    const icon=cat?.icon||'📦';
+    const pct=totalExp>0?Math.round((data.total/totalExp)*100):0;
+    const kid='cat_'+safeId(major);
+    const isOpen=expandedMajors.has(kid);
+    const sortedSubs=Object.entries(data.subs).sort((a,b)=>b[1]-a[1]);
+
+    let subHtml='';
+    sortedSubs.forEach(([sub,amt],idx)=>{
+      const subPct=data.total>0?Math.round((amt/data.total)*100):0;
+      const subIcon=cat?.subs?.find(s=>s.name===sub)?.icon||icon;
+      subHtml+=`<div class="dash-sub-row" style="${idx<sortedSubs.length-1?'border-bottom:1px solid rgba(255,255,255,.04)':''}">
+        <div class="dash-sub-ico">${subIcon}</div>
+        <div class="dash-sub-info">
+          <div class="dash-sub-nm">${sub}</div>
+          <div class="dash-sub-bar"><div class="dash-sub-bar-fill" style="width:${subPct}%;background:${color}"></div></div>
+        </div>
+        <div style="flex-shrink:0;text-align:right">
+          <div class="dash-sub-amt">₹${fmt(amt)}</div>
+          <div class="dash-sub-pct">${subPct}%</div>
+        </div>
+      </div>`;
+    });
+
+    html+=`<div class="dash-major">
+      <div class="dash-major-head" onclick="toggleCard('${kid}','cat')">
+        <div class="dash-mico" style="background:${color}22">${icon}</div>
+        <div class="dash-minfo">
+          <div class="dash-mname">${major}</div>
+          <div class="dash-mpct">${pct}% of total · ${sortedSubs.length} sub-cat${sortedSubs.length!==1?'s':''}</div>
+        </div>
+        <div class="dash-mamt" style="color:${color}">₹${fmt(data.total)}</div>
+        <div class="dash-chevron${isOpen?' open':''}" id="chv_${kid}">▼</div>
+      </div>
+      <div class="dash-bar-wrap">
+        <div class="dash-bar-bg">
+          <div class="dash-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${color},${color}99)"></div>
+        </div>
+      </div>
+      <div class="dash-subs${isOpen?' open':''}" id="subs_${kid}">${subHtml}</div>
+    </div>`;
+  });
+
+  el.innerHTML=html;
+}
+
+// ── PAYMENT VIEW ──
+function renderDashPayment(){
+  const txs=getDashTxs();
+  const totalExp=txs.reduce((a,t)=>a+t.amount,0);
+  const el=document.getElementById('dashGrid');
+
+  if(!txs.length){
+    el.innerHTML=`<div class="empty"><div class="empty-ico">💳</div><div class="empty-nm">No expense data</div><div>Add transactions to see analysis</div></div>`;
+    return;
+  }
+
+  // Aggregate by payment mode → then sub-breakdown by category
+  const byPay={};
+  txs.forEach(t=>{
+    const pm=t.paymentMode||'Unknown';
+    if(!byPay[pm]) byPay[pm]={total:0,cats:{}};
+    byPay[pm].total+=t.amount;
+    const cat=t.majorCategory||'Other';
+    byPay[pm].cats[cat]=(byPay[pm].cats[cat]||0)+t.amount;
+  });
+
+  const sortedPays=Object.entries(byPay).sort((a,b)=>b[1].total-a[1].total);
+  const circumference=2*Math.PI*28;
+
+  // Payment mode colors palette
+  const pmColors=['#6c63ff','#ff5f7e','#3ddc84','#ffbe3d','#00d4ff','#ff8c42','#c77dff','#4cc9f0'];
+
+  // Summary card
+  let html=`<div class="dash-total-card">
+    <div class="dash-ring">
+      <svg viewBox="0 0 64 64">
+        <circle class="dash-ring-bg" cx="32" cy="32" r="28"/>
+        <circle class="dash-ring-fill" cx="32" cy="32" r="28"
+          stroke="url(#pgr)" stroke-dasharray="${circumference.toFixed(1)}"
+          stroke-dashoffset="${(circumference*0.15).toFixed(1)}"/>
+        <defs><linearGradient id="pgr" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#ffbe3d"/>
+          <stop offset="100%" stop-color="#ff5f7e"/>
+        </linearGradient></defs>
+      </svg>
+      <div class="dash-ring-label">${sortedPays.length}<br><span style="font-size:9px">modes</span></div>
+    </div>
+    <div class="dash-total-info">
+      <div class="dash-total-title">Total Expenses · ${periodLabel()}</div>
+      <div class="dash-total-amt cr">₹${fmt(totalExp)}</div>
+      <div class="dash-total-sub">${txs.length} txn${txs.length!==1?'s':''} · ${sortedPays.length} payment mode${sortedPays.length!==1?'s':''}</div>
+    </div>
+  </div>`;
+
+  sortedPays.forEach(([pm,data],pmIdx)=>{
+    const pmObj=S.payments.find(p=>p.name===pm);
+    const pmIcon=pmObj?.icon||'💳';
+    const color=pmColors[pmIdx % pmColors.length];
+    const pct=totalExp>0?Math.round((data.total/totalExp)*100):0;
+    const kid='pay_'+safeId(pm);
+    const isOpen=expandedPays.has(kid);
+    const sortedCats=Object.entries(data.cats).sort((a,b)=>b[1]-a[1]);
+
+    // Category breakdown rows inside payment card
+    let catHtml='';
+    sortedCats.forEach(([cat,amt],idx)=>{
+      const catObj=S.categories[cat];
+      const catIcon=catObj?.icon||'📦';
+      const catColor=catObj?.color||'#94a3b8';
+      const catPct=data.total>0?Math.round((amt/data.total)*100):0;
+      catHtml+=`<div class="dash-sub-row" style="${idx<sortedCats.length-1?'border-bottom:1px solid rgba(255,255,255,.04)':''}">
+        <div class="dash-sub-ico">${catIcon}</div>
+        <div class="dash-sub-info">
+          <div class="dash-sub-nm" style="color:${catColor}">${cat}</div>
+          <div class="dash-sub-bar"><div class="dash-sub-bar-fill" style="width:${catPct}%;background:${catColor}"></div></div>
+        </div>
+        <div style="flex-shrink:0;text-align:right">
+          <div class="dash-sub-amt">₹${fmt(amt)}</div>
+          <div class="dash-sub-pct">${catPct}%</div>
+        </div>
+      </div>`;
+    });
+
+    html+=`<div class="dash-major">
+      <div class="dash-major-head" onclick="toggleCard('${kid}','pay')">
+        <div class="dash-mico" style="background:${color}22;font-size:22px">${pmIcon}</div>
+        <div class="dash-minfo">
+          <div class="dash-mname">${pm}</div>
+          <div class="dash-mpct">${pct}% of total · ${sortedCats.length} categor${sortedCats.length!==1?'ies':'y'}</div>
+        </div>
+        <div class="dash-mamt" style="color:${color}">₹${fmt(data.total)}</div>
+        <div class="dash-chevron${isOpen?' open':''}" id="chv_${kid}">▼</div>
+      </div>
+      <div class="dash-bar-wrap">
+        <div class="dash-bar-bg">
+          <div class="dash-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${color},${color}99)"></div>
+        </div>
+      </div>
+      <div class="dash-subs${isOpen?' open':''}" id="subs_${kid}">${catHtml}</div>
+    </div>`;
+  });
+
+  el.innerHTML=html;
+}
+
+function toggleCard(kid, type){
+  const subsEl=document.getElementById('subs_'+kid);
+  const chvEl=document.getElementById('chv_'+kid);
+  if(!subsEl) return;
+  const store=type==='pay'?expandedPays:expandedMajors;
+  if(subsEl.classList.contains('open')){
+    subsEl.classList.remove('open');
+    if(chvEl) chvEl.classList.remove('open');
+    store.delete(kid);
+  } else {
+    subsEl.classList.add('open');
+    if(chvEl) chvEl.classList.add('open');
+    store.add(kid);
+  }
+}
+
+// keep toggleMajor as alias for any old references
+function toggleMajor(kid){ toggleCard(kid,'cat'); }
+
+// ════════════════════════════════
+//  TABS
+// ════════════════════════════════
+// ════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════
+let dashPeriod='month';
+let expandedMajors=new Set();
+
+function setPeriod(p){
+  dashPeriod=p;
+  ['month','3month','year'].forEach((k,i)=>{
+    document.getElementById('pb'+i).className='period-btn'+(k===p?' on':'');
+  });
+  renderDash();
+}
+
+function getDashTxs(){
+  const now=new Date();
+  return S.transactions.filter(t=>{
+    if(t.type!=='expense') return false;
+    const d=new Date(t.date);
+    if(dashPeriod==='month'){
+      return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+    } else if(dashPeriod==='3month'){
+      const cutoff=new Date(now.getFullYear(),now.getMonth()-2,1);
+      return d>=cutoff;
+    } else {
+      return d.getFullYear()===now.getFullYear();
+    }
+  });
+}
+
+function periodLabel(){
+  const now=new Date();
+  if(dashPeriod==='month') return now.toLocaleString('en-IN',{month:'long',year:'numeric'});
+  if(dashPeriod==='3month') return 'Last 3 Months';
+  return 'Year '+now.getFullYear();
+}
+
+function safeId(s){ return s.replace(/[^a-zA-Z0-9]/g,'_'); }
+
+function renderDash(){
+  const txs=getDashTxs();
+  const totalExp=txs.reduce((a,t)=>a+t.amount,0);
+  const el=document.getElementById('dashGrid');
+
+  if(!txs.length){
+    el.innerHTML=`<div class="empty"><div class="empty-ico">📊</div><div class="empty-nm">No expense data</div><div>Add transactions to see analysis</div></div>`;
+    return;
+  }
+
+  // Aggregate by major → sub
+  const byMajor={};
+  txs.forEach(t=>{
+    const m=t.majorCategory||'Other';
+    if(!byMajor[m]) byMajor[m]={total:0,subs:{}};
+    byMajor[m].total+=t.amount;
+    const s=t.subCategory||m;
+    byMajor[m].subs[s]=(byMajor[m].subs[s]||0)+t.amount;
+  });
+
+  const sortedMajors=Object.entries(byMajor).sort((a,b)=>b[1].total-a[1].total);
+  const circumference=2*Math.PI*28;
+
+  // Summary card
+  let html=`<div class="dash-total-card">
+    <div class="dash-ring">
+      <svg viewBox="0 0 64 64">
+        <circle class="dash-ring-bg" cx="32" cy="32" r="28"/>
+        <circle class="dash-ring-fill" cx="32" cy="32" r="28"
+          stroke="url(#dgr)" stroke-dasharray="${circumference.toFixed(1)}"
+          stroke-dashoffset="${(circumference*0.15).toFixed(1)}"/>
+        <defs><linearGradient id="dgr" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#6c63ff"/>
+          <stop offset="100%" stop-color="#ff5f7e"/>
+        </linearGradient></defs>
+      </svg>
+      <div class="dash-ring-label">${sortedMajors.length}<br><span style="font-size:9px">cats</span></div>
+    </div>
+    <div class="dash-total-info">
+      <div class="dash-total-title">Total Expenses · ${periodLabel()}</div>
+      <div class="dash-total-amt cr">₹${fmt(totalExp)}</div>
+      <div class="dash-total-sub">${txs.length} txn${txs.length!==1?'s':''} · ${sortedMajors.length} categor${sortedMajors.length!==1?'ies':'y'}</div>
+    </div>
+  </div>`;
+
+  // One card per major category
+  sortedMajors.forEach(([major,data])=>{
+    const cat=S.categories[major];
+    const color=cat?.color||'#6c63ff';
+    const icon=cat?.icon||'📦';
+    const pct=totalExp>0?Math.round((data.total/totalExp)*100):0;
+    const isOpen=expandedMajors.has(major);
+    const kid=safeId(major);
+
+    const sortedSubs=Object.entries(data.subs).sort((a,b)=>b[1]-a[1]);
+
+    // Sub-category rows
+    let subHtml='';
+    sortedSubs.forEach(([sub,amt],idx)=>{
+      const subPct=data.total>0?Math.round((amt/data.total)*100):0;
+      const subIcon=cat?.subs?.find(s=>s.name===sub)?.icon||icon;
+      const isLast=idx===sortedSubs.length-1;
+      subHtml+=`<div class="dash-sub-row" style="${isLast?'':'border-bottom:1px solid rgba(255,255,255,.04)'}">
+        <div class="dash-sub-ico">${subIcon}</div>
+        <div class="dash-sub-info">
+          <div class="dash-sub-nm">${sub}</div>
+          <div class="dash-sub-bar">
+            <div class="dash-sub-bar-fill" style="width:${subPct}%;background:${color}"></div>
+          </div>
+        </div>
+        <div style="flex-shrink:0;text-align:right">
+          <div class="dash-sub-amt">₹${fmt(amt)}</div>
+          <div class="dash-sub-pct">${subPct}%</div>
+        </div>
+      </div>`;
+    });
+
+    html+=`<div class="dash-major">
+      <div class="dash-major-head" onclick="toggleMajor('${kid}')">
+        <div class="dash-mico" style="background:${color}22">${icon}</div>
+        <div class="dash-minfo">
+          <div class="dash-mname">${major}</div>
+          <div class="dash-mpct">${pct}% of total · tap to ${isOpen?'collapse':'expand'}</div>
+        </div>
+        <div class="dash-mamt" style="color:${color}">₹${fmt(data.total)}</div>
+        <div class="dash-chevron${isOpen?' open':''}" id="chv_${kid}">▼</div>
+      </div>
+      <div class="dash-bar-wrap">
+        <div class="dash-bar-bg">
+          <div class="dash-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${color},${color}99)"></div>
+        </div>
+      </div>
+      <div class="dash-subs${isOpen?' open':''}" id="subs_${kid}">
+        ${subHtml}
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML=html;
+}
+
+function toggleMajor(kid){
+  const subsEl=document.getElementById('subs_'+kid);
+  const chvEl=document.getElementById('chv_'+kid);
+  if(!subsEl) return;
+  if(subsEl.classList.contains('open')){
+    subsEl.classList.remove('open');
+    if(chvEl) chvEl.classList.remove('open');
+    expandedMajors.delete(kid);
+  } else {
+    subsEl.classList.add('open');
+    if(chvEl) chvEl.classList.add('open');
+    expandedMajors.add(kid);
+  }
+}
+
+// ════════════════════════════════
+//  TABS
+// ════════════════════════════════
 function switchTab(t){
   curTab=t;
-  document.getElementById('vTx').style.display  =t==='tx'?'block':'none';
-  document.getElementById('vBud').style.display =t==='bud'?'block':'none';
-  document.getElementById('tabTx').className ='tab'+(t==='tx'?' on':'');
-  document.getElementById('tabBud').className='tab'+(t==='bud'?' on':'');
-  document.getElementById('nvHome').className='nv'+(t==='tx'?' on':'');
-  document.getElementById('nvBud').className ='nv'+(t==='bud'?' on':'');
+  document.getElementById('vTx').style.display  =t==='tx'  ?'block':'none';
+  document.getElementById('vDash').style.display =t==='dash'?'block':'none';
+  document.getElementById('vBud').style.display  =t==='bud' ?'block':'none';
+  document.getElementById('tabTx').className   ='tab'+(t==='tx'  ?' on':'');
+  document.getElementById('tabDash').className ='tab'+(t==='dash'?' on':'');
+  document.getElementById('tabBud').className  ='tab'+(t==='bud' ?' on':'');
+  document.getElementById('nvHome').className  ='nv'+(t==='tx'  ?' on':'');
+  document.getElementById('nvDash').className  ='nv'+(t==='dash'?' on':'');
+  document.getElementById('nvBud').className   ='nv'+(t==='bud' ?' on':'');
   document.getElementById('scroll').scrollTop=0;
+  if(t==='dash') renderDash();
 }
 
 // ════════════════════════════════
