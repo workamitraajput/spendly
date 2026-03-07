@@ -167,6 +167,8 @@
     .arow .inp.xsm{flex:none;width:50px;text-align:center;padding-left:6px;padding-right:6px}
     .mini{background:var(--ac);border:none;border-radius:12px;padding:0 13px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0;white-space:nowrap}
     .mini:active{opacity:.8}
+    .type-tog{flex:1;background:var(--s2);border:1px solid var(--b);border-radius:11px;padding:9px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--mt);cursor:pointer}
+    .type-tog.on{background:var(--ac);border-color:var(--ac);color:#fff}
 
     /* budget rows */
     .budrow{display:flex;align-items:center;gap:10px;margin-bottom:9px}
@@ -320,6 +322,10 @@
     <!-- CATEGORIES -->
     <div class="mview on" id="mv0">
       <div class="sec" style="margin-top:0">Add Major Category</div>
+      <div style="display:flex;gap:7px;margin-bottom:8px">
+        <button class="type-tog on" id="majTypExp" onclick="setMajType('expense')">💸 Expense</button>
+        <button class="type-tog" id="majTypInc" onclick="setMajType('income')">💰 Income</button>
+      </div>
       <div class="arow">
         <input class="inp" id="mMajNm" placeholder="e.g. Food"/>
         <input class="inp xsm" id="mMajIco" placeholder="🍔"/>
@@ -330,6 +336,10 @@
       <!-- inline edit major -->
       <div class="emodal" id="editMajorBox">
         <div class="emodal-title">✏️ Edit Major Category</div>
+        <div style="display:flex;gap:7px;margin-bottom:10px">
+          <button class="type-tog on" id="eMajTypExp" onclick="setEditMajType('expense')">💸 Expense</button>
+          <button class="type-tog" id="eMajTypInc" onclick="setEditMajType('income')">💰 Income</button>
+        </div>
         <div class="erow">
           <input class="inp" id="eMajNm" placeholder="Name"/>
           <input class="inp xsm" id="eMajIco" placeholder="📦"/>
@@ -422,6 +432,7 @@ let txType='expense', filterCat='all', curTab='tx';
 let toastT;
 // edit state
 let editMajorOld='', editSubMajor='', editSubOld='', editPayId='';
+let newMajType='expense', editMajType='expense';
 
 // ════════════════════════════════
 //  BOOT
@@ -542,7 +553,7 @@ function renderTxList(){
 }
 
 function renderBudGrid(){
-  const majors=Object.keys(S.categories).filter(m=>m.toLowerCase()!=='income');
+  const majors=Object.keys(S.categories).filter(m=>(S.categories[m]?.type||'expense')==='expense');
   const el=document.getElementById('budGrid');
   if(!majors.length){
     el.innerHTML=`<div class="empty"><div class="empty-ico">📊</div><div class="empty-nm">No categories yet</div><div>Add categories in ⚙️</div></div>`;
@@ -593,11 +604,14 @@ function renderManage(){
   let catHtml='';
   majors.forEach(m=>{
     const v=S.categories[m];
+    const typeBadge=(v.type||'expense')==='income'
+      ?'<span style="font-size:10px;background:rgba(61,220,132,.15);color:var(--gn);border-radius:6px;padding:2px 7px;margin-left:6px">💰 Income</span>'
+      :'<span style="font-size:10px;background:rgba(108,99,255,.15);color:var(--ac);border-radius:6px;padding:2px 7px;margin-left:6px">💸 Expense</span>';
     catHtml+=`<div style="margin-bottom:10px">
       <div class="lrow">
         <div class="lico">${v.icon||'📦'}</div>
         <div class="linf">
-          <div class="lnm" style="color:${v.color||'#fff'}">${m}</div>
+          <div class="lnm" style="color:${v.color||'#fff'}">${m}${typeBadge}</div>
           <div class="lsub">${v.subs.length?v.subs.length+' sub-categories':'No sub-categories'}</div>
         </div>
         <div class="lacts">
@@ -635,7 +649,7 @@ function renderManage(){
     </div>`).join('')||`<div style="color:var(--mt);font-size:13px;padding:8px 0">No payment modes yet</div>`;
 
   // --- BUDGETS ---
-  const exMajors=Object.keys(S.categories).filter(m=>m.toLowerCase()!=='income');
+  const exMajors=Object.keys(S.categories).filter(m=>(S.categories[m]?.type||'expense')==='expense');
   document.getElementById('budInputList').innerHTML=exMajors.length
     ? exMajors.map(m=>`
         <div class="budrow">
@@ -646,6 +660,18 @@ function renderManage(){
     : `<div style="color:var(--mt);font-size:13px;padding:8px 0">Add categories first</div>`;
 }
 
+// ── MAJOR TYPE TOGGLES ──
+function setMajType(t){
+  newMajType=t;
+  document.getElementById('majTypExp').className='type-tog'+(t==='expense'?' on':'');
+  document.getElementById('majTypInc').className='type-tog'+(t==='income'?' on':'');
+}
+function setEditMajType(t){
+  editMajType=t;
+  document.getElementById('eMajTypExp').className='type-tog'+(t==='expense'?' on':'');
+  document.getElementById('eMajTypInc').className='type-tog'+(t==='income'?' on':'');
+}
+
 // ── ADD MAJOR ──
 async function addMajor(){
   const name=document.getElementById('mMajNm').value.trim();
@@ -654,9 +680,9 @@ async function addMajor(){
   if(!name){ toast('Enter a category name','err'); return; }
   if(S.categories[name]){ toast('Category already exists','err'); return; }
   try{
-    const r=await POST({action:'addCategory',data:{major:name,sub:'',icon,color}});
+    const r=await POST({action:'addCategory',data:{major:name,sub:'',icon,color,type:newMajType}});
     if(!r.ok) throw new Error(r.error||'Failed');
-    S.categories[name]={icon,color,subs:[]};
+    S.categories[name]={icon,color,type:newMajType,subs:[]};
     document.getElementById('mMajNm').value='';
     document.getElementById('mMajIco').value='';
     renderManage(); renderChips(); renderBudGrid();
@@ -670,6 +696,7 @@ function openEditMajor(name){
   document.getElementById('eMajNm').value=name;
   document.getElementById('eMajIco').value=S.categories[name]?.icon||'';
   document.getElementById('eMajCol').value=S.categories[name]?.color||'#6c63ff';
+  setEditMajType(S.categories[name]?.type||'expense');
   const box=document.getElementById('editMajorBox');
   box.classList.add('open');
   box.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -681,12 +708,12 @@ async function saveEditMajor(){
   const color=document.getElementById('eMajCol').value;
   if(!newName){ toast('Enter a name','err'); return; }
   try{
-    const r=await POST({action:'editCategory',data:{oldMajor:editMajorOld,newMajor:newName,icon,color}});
+    const r=await POST({action:'editCategory',data:{oldMajor:editMajorOld,newMajor:newName,icon,color,type:editMajType}});
     if(!r.ok) throw new Error(r.error||'Failed');
     // update state
     const old=S.categories[editMajorOld];
     delete S.categories[editMajorOld];
-    S.categories[newName]={...old,icon,color};
+    S.categories[newName]={...old,icon,color,type:editMajType};
     // update budgets key
     if(S.budgets[editMajorOld]!==undefined){ S.budgets[newName]=S.budgets[editMajorOld]; delete S.budgets[editMajorOld]; }
     closeEditMajor();
@@ -868,15 +895,21 @@ function setType(t){
   txType=t;
   document.getElementById('tgExp').className='tg'+(t==='expense'?' exp':'');
   document.getElementById('tgInc').className='tg'+(t==='income'?' inc':'');
+  document.getElementById('subSel').value='';
+  document.getElementById('budWarn').style.display='none';
   buildSubSel();
 }
 
 function buildSubSel(){
-  // flat list of all sub-categories, grouped by major
+  // Only show categories matching current txType (income or expense)
+  // Category type is stored in v.type field; defaults to 'expense' if not set
   const sel=document.getElementById('subSel');
   sel.innerHTML='<option value="">— Select sub-category —</option>';
+  let count=0;
   Object.entries(S.categories).forEach(([major,v])=>{
     if(!v.subs.length) return;
+    const catType=(v.type||'expense').toLowerCase();
+    if(catType!==txType) return;
     const grp=document.createElement('optgroup');
     grp.label=`${v.icon||'📦'} ${major}`;
     v.subs.forEach(s=>{
@@ -884,9 +917,15 @@ function buildSubSel(){
       opt.value=`${major}|||${s.name}`;
       opt.textContent=`${s.icon||''} ${s.name}`;
       grp.appendChild(opt);
+      count++;
     });
     sel.appendChild(grp);
   });
+  if(count===0){
+    const opt=document.createElement('option');
+    opt.value=''; opt.textContent=`— No ${txType} categories yet —`;
+    sel.appendChild(opt);
+  }
 }
 
 function buildPaySel(){
