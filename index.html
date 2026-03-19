@@ -611,6 +611,7 @@ async function syncAll() {
     S.payments     = d.payments    || [];
     S.budgets      = d.budgets     || {};
     S.transactions = (d.transactions || []).sort((a,b) => b.id - a.id);
+    S.parties      = d.parties     || [];
     renderAll();
     setSyn('synced', 'Synced');
     setTimeout(() => setSyn('', 'Sync'), 3000);
