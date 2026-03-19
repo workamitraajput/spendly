@@ -164,7 +164,7 @@
     .dash-pb{padding-bottom:110px}
 
     /* NAV */
-    .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:6px 10px calc(var(--sb)+6px);background:linear-gradient(0deg,#06060f 80%,transparent);display:grid;grid-template-columns:1fr auto 1fr 1fr;align-items:center;gap:2px;z-index:20}
+    .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:6px 10px calc(var(--sb)+6px);background:linear-gradient(0deg,#06060f 80%,transparent);display:grid;grid-template-columns:1fr auto 1fr 1fr 1fr;align-items:center;gap:2px;z-index:20}
     .nv{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--mt);font-size:10px;cursor:pointer;padding:7px 8px;border-radius:12px}
     .nv.on{color:var(--ac)}
     .nv svg{width:20px;height:20px}
@@ -197,6 +197,29 @@
     .sbtn{width:100%;background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;border-radius:15px;padding:16px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 8px 24px rgba(108,99,255,.3);margin-top:4px}
     .sbtn:disabled{opacity:.5}
 
+    /* ── PARTIES ── */
+    .party-card{background:var(--s1);border:1px solid var(--b);border-radius:18px;margin-bottom:10px;overflow:hidden;cursor:pointer}
+    .party-card:active{background:var(--s2)}
+    .party-head{display:flex;align-items:center;gap:12px;padding:14px 16px}
+    .party-avatar{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;font-family:'Syne',sans-serif;font-weight:800;font-size:16px}
+    .party-info{flex:1;min-width:0}
+    .party-nm{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+    .party-meta{font-size:11px;color:var(--mt);margin-top:2px}
+    .party-bal{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;flex-shrink:0;text-align:right}
+    .party-bal-lbl{font-size:10px;font-weight:400;display:block;text-align:right;margin-top:1px}
+    .ptog{display:grid;grid-template-columns:1fr 1fr;background:var(--s2);border-radius:13px;padding:4px;margin-bottom:14px}
+    .ptg{background:none;border:none;border-radius:10px;padding:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--mt);cursor:pointer}
+    .ptg.gave{background:#ff5f7e;color:#fff}
+    .ptg.got{background:var(--gn);color:#06060f}
+    .ptx{display:flex;align-items:center;gap:10px;padding:10px 15px;border-bottom:1px solid rgba(255,255,255,.04)}
+    .ptx:last-child{border-bottom:none}
+    .ptx-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .ptx-info{flex:1;min-width:0}
+    .ptx-nm{font-size:13px;font-weight:500}
+    .ptx-dt{font-size:11px;color:var(--mt);margin-top:1px}
+    .ptx-amt{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;flex-shrink:0}
+    .party-txlist{border-top:1px solid var(--b);padding:4px 0 6px}
+    .settled-badge{display:inline-block;background:rgba(61,220,132,.15);color:var(--gn);border-radius:8px;padding:3px 10px;font-size:11px;font-weight:600;margin-top:4px}
     /* MANAGE */
     .mtabs{display:flex;background:var(--s2);border-radius:13px;padding:4px;margin-bottom:14px;gap:2px}
     .mtab{flex:1;background:none;border:none;border-radius:10px;padding:9px 3px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--mt);cursor:pointer}
@@ -279,6 +302,7 @@
       <button class="tab"    id="tabTx"   onclick="switchTab('tx')">Transactions</button>
       <button class="tab on" id="tabDash" onclick="switchTab('dash')">Analysis</button>
       <button class="tab"    id="tabBud"  onclick="switchTab('bud')">Budget</button>
+      <button class="tab"    id="tabPty"  onclick="switchTab('pty')">Parties</button>
     </div>
   </div>
 
@@ -300,6 +324,16 @@
       </div>
       <div class="sec" id="dashSec">Expense by Category</div>
       <div id="dashGrid"></div>
+      <div style="height:110px"></div>
+    </div>
+
+    <!-- PARTIES -->
+    <div id="vPty" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+        <div class="sec" style="margin:14px 0 9px">All Parties</div>
+        <button onclick="openAddParty()" style="background:var(--ac);border:none;border-radius:10px;padding:6px 13px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer;margin-top:6px">+ Party</button>
+      </div>
+      <div id="partyList"></div>
       <div style="height:110px"></div>
     </div>
 
@@ -326,6 +360,10 @@
     <button class="nv" id="nvBud" onclick="switchTab('bud')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Budget
+    </button>
+    <button class="nv" id="nvPty" onclick="switchTab('pty')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Parties
     </button>
   </div>
 </div>
@@ -458,6 +496,53 @@
   </div>
 </div>
 
+<!-- ══ ADD PARTY ══ -->
+<div class="overlay" id="addPartyOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="stitle">New Party</div>
+    <label class="lbl">Party Name</label>
+    <input class="inp" id="ptyNm" placeholder="e.g. Rahul, Office, Family"/>
+    <label class="lbl">Icon / Emoji (optional)</label>
+    <input class="inp" id="ptyIco" placeholder="👤" style="font-size:24px;text-align:center"/>
+    <button class="sbtn" onclick="saveParty()">Create Party</button>
+  </div>
+</div>
+
+<!-- ══ PARTY DETAIL & ADD ENTRY ══ -->
+<div class="overlay" id="ptyDetailOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+      <div id="ptyDetailIco" style="width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--s2);flex-shrink:0"></div>
+      <div>
+        <div id="ptyDetailNm" style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800"></div>
+        <div id="ptyDetailBal" style="font-size:13px;margin-top:2px"></div>
+      </div>
+      <button onclick="deleteParty()" style="margin-left:auto;background:rgba(255,69,69,.12);border:1px solid rgba(255,69,69,.3);border-radius:10px;padding:7px 10px;font-size:12px;color:var(--rd);cursor:pointer">🗑</button>
+    </div>
+
+    <div style="background:var(--s2);border-radius:14px;padding:14px;margin-bottom:16px">
+      <div class="sec" style="margin:0 0 10px">Add Entry</div>
+      <div class="ptog">
+        <button class="ptg gave" id="ptgGave" onclick="setPtyType('gave')">I Gave 💸</button>
+        <button class="ptg" id="ptgGot" onclick="setPtyType('got')">I Got 💰</button>
+      </div>
+      <label class="lbl">Amount (₹)</label>
+      <input class="inp" id="ptyAmt" type="number" inputmode="decimal" placeholder="0"/>
+      <label class="lbl">Date</label>
+      <input class="inp" id="ptyDate" type="date"/>
+      <label class="lbl">Note (optional)</label>
+      <input class="inp" id="ptyNote" placeholder="e.g. dinner, rent, loan"/>
+      <button class="sbtn" onclick="addPartyEntry()">Add Entry</button>
+    </div>
+
+    <div class="sec" style="margin-top:0">History</div>
+    <div id="ptyTxList"></div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -465,7 +550,7 @@
 //  STATE
 // ══════════════════════════════════════
 let URL_ = localStorage.getItem('spendly_url') || '';
-let S = { categories:{}, payments:[], budgets:{}, transactions:[] };
+let S = { categories:{}, payments:[], budgets:{}, transactions:[], parties:[] };
 let txType = 'expense', filterCat = 'all', curTab = 'dash';
 let newMajType = 'expense', editMajType = 'expense';
 let editMajorOld = '', editSubMajor = '', editSubOld = '', editPayId = '';
@@ -546,6 +631,7 @@ function setSyn(cls, lbl) {
 function renderAll() {
   renderBal(); renderChips(); renderTxList(); renderBudGrid();
   if (curTab === 'dash') renderDash();
+  if (curTab === 'pty') renderParties();
 }
 
 function renderBal() {
@@ -901,20 +987,21 @@ function toggleCard(kid) {
 // ══════════════════════════════════════
 function switchTab(t) {
   curTab = t;
-  ['tx','dash','bud'].forEach(id => {
-    document.getElementById('v'+(id.charAt(0).toUpperCase()+id.slice(1))||'v'+id).style.display = t===id?'block':'none';
-  });
   document.getElementById('vTx').style.display   = t==='tx'   ? 'block' : 'none';
   document.getElementById('vDash').style.display  = t==='dash' ? 'block' : 'none';
   document.getElementById('vBud').style.display   = t==='bud'  ? 'block' : 'none';
+  document.getElementById('vPty').style.display   = t==='pty'  ? 'block' : 'none';
   document.getElementById('tabTx').className   = 'tab' + (t==='tx'   ? ' on' : '');
   document.getElementById('tabDash').className = 'tab' + (t==='dash' ? ' on' : '');
   document.getElementById('tabBud').className  = 'tab' + (t==='bud'  ? ' on' : '');
+  document.getElementById('tabPty').className  = 'tab' + (t==='pty'  ? ' on' : '');
   document.getElementById('nvTx').className    = 'nv'  + (t==='tx'   ? ' on' : '');
   document.getElementById('nvDash').className  = 'nv'  + (t==='dash' ? ' on' : '');
   document.getElementById('nvBud').className   = 'nv'  + (t==='bud'  ? ' on' : '');
+  document.getElementById('nvPty').className   = 'nv'  + (t==='pty'  ? ' on' : '');
   document.getElementById('scroll').scrollTop = 0;
   if (t === 'dash') renderDash();
+  if (t === 'pty') renderParties();
 }
 
 // ══════════════════════════════════════
@@ -1307,6 +1394,190 @@ async function delTx(id) {
 // ══════════════════════════════════════
 //  OVERLAYS
 // ══════════════════════════════════════
+
+// ═══════════════════════ PARTIES ═══════════════════════
+// S.parties = [ { id, name, icon, entries:[ {id,type:'gave'|'got',amount,date,note} ] } ]
+// Stored in Google Sheet: "Parties" (ID|Name|Icon) + "PartyEntries" (ID|PartyID|Type|Amount|Date|Note)
+
+let curPartyId = null;  // party open in detail overlay
+let ptyEntryType = 'gave';
+
+// ── Render party list ──
+function renderParties() {
+  const el = document.getElementById('partyList');
+  if (!S.parties || !S.parties.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ico">🤝</div>
+      <div class="empty-nm">No parties yet</div>
+      <div>Tap "+ Party" to add someone</div></div>`;
+    return;
+  }
+  el.innerHTML = S.parties.map(p => {
+    const net = partyNet(p);
+    const isSettled = net === 0;
+    const isOwed = net > 0;   // they owe me (I gave more)
+    const iOwe  = net < 0;    // I owe them (they gave me more)
+    const col = isSettled ? 'var(--mt)' : isOwed ? 'var(--gn)' : 'var(--ac2)';
+    const lbl = isSettled ? 'Settled ✓' : isOwed ? 'They owe you' : 'You owe';
+    const initials = p.name.slice(0,2).toUpperCase();
+    return `<div class="party-card" onclick="openPartyDetail('${esc(p.id)}')">
+      <div class="party-head">
+        <div class="party-avatar" style="background:${hashColor(p.id)}22;color:${hashColor(p.id)}">${p.icon || initials}</div>
+        <div class="party-info">
+          <div class="party-nm">${p.name}</div>
+          <div class="party-meta">${p.entries.length} entr${p.entries.length!==1?'ies':'y'}</div>
+          ${isSettled ? '<span class="settled-badge">Settled ✓</span>' : ''}
+        </div>
+        <div>
+          <div class="party-bal" style="color:${col}">₹${fmt(Math.abs(net))}</div>
+          <span class="party-bal-lbl" style="color:${col}">${lbl}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function partyNet(p) {
+  // positive = they owe me (I gave), negative = I owe them (I got/received)
+  return (p.entries || []).reduce((sum, e) =>
+    sum + (e.type === 'gave' ? e.amount : -e.amount), 0);
+}
+
+function hashColor(id) {
+  const colors = ['#6c63ff','#ff5f7e','#3ddc84','#ffbe3d','#00d4ff','#ff8c42','#c77dff','#4cc9f0'];
+  let h = 0; for (let i=0; i<id.length; i++) h = (h*31 + id.charCodeAt(i)) & 0xfffffff;
+  return colors[h % colors.length];
+}
+
+// ── Open / close add party ──
+function openAddParty() {
+  document.getElementById('ptyNm').value = '';
+  document.getElementById('ptyIco').value = '';
+  document.getElementById('addPartyOv').classList.add('open');
+  setTimeout(() => document.getElementById('ptyNm').focus(), 350);
+}
+
+async function saveParty() {
+  const name = document.getElementById('ptyNm').value.trim();
+  const icon = document.getElementById('ptyIco').value.trim();
+  if (!name) { toast('Enter party name', 'err'); return; }
+  try {
+    const r = await API({ action:'addParty', name, icon });
+    if (!r.ok) throw new Error(r.error || 'Failed');
+    S.parties.push({ id: r.id, name, icon, entries: [] });
+    document.getElementById('addPartyOv').classList.remove('open');
+    renderParties();
+    toast('✅ Party created', 'ok');
+  } catch(e) { toast('⚠️ ' + e.message, 'err'); }
+}
+
+// ── Party detail overlay ──
+function openPartyDetail(id) {
+  curPartyId = id;
+  setPtyType('gave');
+  const now = new Date();
+  document.getElementById('ptyDate').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  document.getElementById('ptyAmt').value = '';
+  document.getElementById('ptyNote').value = '';
+  renderPartyDetail();
+  document.getElementById('ptyDetailOv').classList.add('open');
+}
+
+function renderPartyDetail() {
+  const p = S.parties.find(x => x.id === curPartyId);
+  if (!p) return;
+  const net = partyNet(p);
+  const isSettled = net === 0;
+  const isOwed = net > 0;
+  const col = isSettled ? 'var(--mt)' : isOwed ? 'var(--gn)' : 'var(--ac2)';
+  const balText = isSettled
+    ? '✅ All settled'
+    : isOwed
+      ? `They owe you ₹${fmt(net)}`
+      : `You owe ₹${fmt(Math.abs(net))}`;
+
+  document.getElementById('ptyDetailIco').textContent  = p.icon || p.name.slice(0,2).toUpperCase();
+  document.getElementById('ptyDetailIco').style.background = hashColor(p.id) + '22';
+  document.getElementById('ptyDetailIco').style.color = hashColor(p.id);
+  document.getElementById('ptyDetailNm').textContent  = p.name;
+  document.getElementById('ptyDetailBal').textContent = balText;
+  document.getElementById('ptyDetailBal').style.color = col;
+
+  // History list
+  const sorted = [...(p.entries||[])].sort((a,b) => new Date(b.date) - new Date(a.date));
+  const listEl = document.getElementById('ptyTxList');
+  if (!sorted.length) {
+    listEl.innerHTML = '<div style="color:var(--mt);font-size:13px;padding:8px 0">No entries yet</div>';
+    return;
+  }
+  listEl.innerHTML = '<div style="background:var(--s1);border:1px solid var(--b);border-radius:16px;overflow:hidden">'
+    + sorted.map((e,i) => {
+      const isGave = e.type === 'gave';
+      const col2 = isGave ? 'var(--ac2)' : 'var(--gn)';
+      const sign = isGave ? '-' : '+';
+      return `<div class="ptx">
+        <div class="ptx-dot" style="background:${col2}"></div>
+        <div class="ptx-info">
+          <div class="ptx-nm">${isGave ? 'You gave' : 'You received'}${e.note ? ' · ' + e.note : ''}</div>
+          <div class="ptx-dt">${fmtD(e.date)}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="ptx-amt" style="color:${col2}">${sign}₹${fmt(e.amount)}</div>
+          <button onclick="deletePartyEntry('${esc(e.id)}')" style="background:none;border:none;color:var(--mt);font-size:10px;cursor:pointer;margin-top:2px">🗑 delete</button>
+        </div>
+      </div>`;
+    }).join('') + '</div>';
+}
+
+function setPtyType(t) {
+  ptyEntryType = t;
+  document.getElementById('ptgGave').className = 'ptg' + (t==='gave' ? ' gave' : '');
+  document.getElementById('ptgGot').className  = 'ptg' + (t==='got'  ? ' got'  : '');
+}
+
+async function addPartyEntry() {
+  const amt = parseFloat(document.getElementById('ptyAmt').value);
+  if (!amt || amt <= 0) { toast('Enter an amount', 'err'); return; }
+  const date = document.getElementById('ptyDate').value || new Date().toISOString().slice(0,10);
+  const note = document.getElementById('ptyNote').value.trim();
+  try {
+    const r = await API({ action:'addPartyEntry', partyId:curPartyId, type:ptyEntryType, amount:amt, date, note });
+    if (!r.ok) throw new Error(r.error || 'Failed');
+    const p = S.parties.find(x => x.id === curPartyId);
+    p.entries.push({ id: r.id, type: ptyEntryType, amount: amt, date: date+'T12:00:00.000Z', note });
+    document.getElementById('ptyAmt').value = '';
+    document.getElementById('ptyNote').value = '';
+    renderPartyDetail();
+    renderParties();
+    toast(ptyEntryType==='gave' ? '💸 Entry added — you gave' : '💰 Entry added — you received', 'ok');
+  } catch(e) { toast('⚠️ ' + e.message, 'err'); }
+}
+
+async function deletePartyEntry(entryId) {
+  if (!confirm('Delete this entry?')) return;
+  try {
+    const r = await API({ action:'deletePartyEntry', entryId });
+    if (!r.ok) throw new Error(r.error || 'Failed');
+    const p = S.parties.find(x => x.id === curPartyId);
+    p.entries = p.entries.filter(e => e.id !== entryId);
+    renderPartyDetail();
+    renderParties();
+    toast('🗑 Entry deleted', 'info');
+  } catch(e) { toast('⚠️ ' + e.message, 'err'); }
+}
+
+async function deleteParty() {
+  const p = S.parties.find(x => x.id === curPartyId);
+  if (!confirm(`Delete party "${p?.name}" and all its entries?`)) return;
+  try {
+    const r = await API({ action:'deleteParty', partyId: curPartyId });
+    if (!r.ok) throw new Error(r.error || 'Failed');
+    S.parties = S.parties.filter(x => x.id !== curPartyId);
+    document.getElementById('ptyDetailOv').classList.remove('open');
+    renderParties();
+    toast('🗑 Party deleted', 'info');
+  } catch(e) { toast('⚠️ ' + e.message, 'err'); }
+}
+
 document.querySelectorAll('.overlay').forEach(o=>{
   o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
 });
