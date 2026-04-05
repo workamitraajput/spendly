@@ -554,7 +554,7 @@ let S = { categories:{}, payments:[], budgets:{}, transactions:[], parties:[] };
 let txType = 'expense', filterCat = 'all', curTab = 'dash';
 let newMajType = 'expense', editMajType = 'expense';
 let editMajorOld = '', editSubMajor = '', editSubOld = '', editPayId = '';
-let dashPeriod = '2026-03', dashView = 'cat';
+const _now = new Date(); let dashPeriod = _now.getFullYear()+'-'+String(_now.getMonth()+1).padStart(2,'0'), dashView = 'cat';
 let expandedCards = new Set();
 let toastT;
 
