@@ -263,6 +263,30 @@
     .empty{text-align:center;padding:40px 20px;color:var(--mt)}
     .empty-ico{font-size:40px;margin-bottom:10px}
     .empty-nm{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--tx);margin-bottom:4px}
+
+    /* custom date range */
+    #customFrom::-webkit-calendar-picker-indicator,
+    #customTo::-webkit-calendar-picker-indicator{filter:invert(0.6);cursor:pointer}
+    /* ── DAY WISE ── */
+    .day-chart{display:flex;align-items:flex-end;gap:4px;height:100px;padding:0 2px;margin-bottom:14px}
+    .day-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;gap:3px;min-width:0}
+    .day-bar-wrap:active{opacity:.7}
+    .day-bar-outer{width:100%;background:var(--s3);border-radius:4px 4px 0 0;position:relative;transition:height .3s ease}
+    .day-bar-inner{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--ac),#9c8eff);position:absolute;bottom:0;left:0;transition:height .3s ease}
+    .day-bar-wrap.active .day-bar-inner{background:linear-gradient(180deg,var(--ac2),#ff8c42)}
+    .day-lbl{font-size:9px;color:var(--mt);text-align:center;white-space:nowrap}
+    .day-lbl.active{color:var(--ac2);font-weight:700}
+    .day-detail{background:var(--s1);border:1px solid var(--b);border-radius:16px;overflow:hidden;margin-bottom:10px;animation:fup .2s ease}
+    .day-detail-head{padding:12px 15px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between}
+    .day-detail-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+    .day-detail-total{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--ac2)}
+    .day-tx{display:flex;align-items:center;gap:10px;padding:10px 15px}
+    .day-tx:not(:last-child){border-bottom:1px solid rgba(255,255,255,.04)}
+    .day-tx-ico{font-size:16px;width:22px;text-align:center;flex-shrink:0}
+    .day-tx-info{flex:1;min-width:0}
+    .day-tx-nm{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .day-tx-sub{font-size:11px;color:var(--mt);margin-top:1px}
+    .day-tx-amt{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ac2);flex-shrink:0}
   </style>
 </head>
 <body>
@@ -318,9 +342,25 @@
     <!-- ANALYSIS DASHBOARD -->
     <div id="vDash">
       <div class="dash-period-row" id="monthChips"></div>
+      <div id="customRangeBox" style="display:none;background:var(--s2);border:1px solid var(--b);border-radius:14px;padding:12px 14px;margin-bottom:8px;animation:fup .2s ease">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mt);margin-bottom:10px;font-weight:700">Custom Date Range</div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+          <div style="flex:1">
+            <div style="font-size:10px;color:var(--mt);margin-bottom:4px">From</div>
+            <input type="date" id="customFrom" class="inp" style="margin-bottom:0;font-size:13px;padding:10px 12px;color-scheme:dark"/>
+          </div>
+          <div style="color:var(--mt);font-size:14px;margin-top:14px">→</div>
+          <div style="flex:1">
+            <div style="font-size:10px;color:var(--mt);margin-bottom:4px">To</div>
+            <input type="date" id="customTo" class="inp" style="margin-bottom:0;font-size:13px;padding:10px 12px;color-scheme:dark"/>
+          </div>
+        </div>
+        <button onclick="applyCustomRange()" style="width:100%;background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;border-radius:11px;padding:11px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer">Apply Range</button>
+      </div>
       <div class="dvrow">
-        <button class="dvbtn on" id="dv0" onclick="setDashView('cat')">📦 By Category</button>
-        <button class="dvbtn"    id="dv1" onclick="setDashView('pay')">💳 By Payment</button>
+        <button class="dvbtn on" id="dv0" onclick="setDashView('cat')">📦 Category</button>
+        <button class="dvbtn"    id="dv1" onclick="setDashView('pay')">💳 Payment</button>
+        <button class="dvbtn"    id="dv2" onclick="setDashView('day')">📅 Day Wise</button>
       </div>
       <div class="sec" id="dashSec">Expense by Category</div>
       <div id="dashGrid"></div>
@@ -554,7 +594,7 @@ let S = { categories:{}, payments:[], budgets:{}, transactions:[], parties:[] };
 let txType = 'expense', filterCat = 'all', curTab = 'dash';
 let newMajType = 'expense', editMajType = 'expense';
 let editMajorOld = '', editSubMajor = '', editSubOld = '', editPayId = '';
-const _now = new Date(); let dashPeriod = _now.getFullYear()+'-'+String(_now.getMonth()+1).padStart(2,'0'), dashView = 'cat';
+const _now = new Date(); let dashPeriod = _now.getFullYear()+'-'+String(_now.getMonth()+1).padStart(2,'0'), dashView = 'cat', activeDayKey = null, customFrom = '', customTo = '';
 let expandedCards = new Set();
 let toastT;
 
@@ -720,7 +760,6 @@ function getPalette(i) {
 // dashPeriod = 'YYYY-MM' string for a specific month, or 'all' for all time
 function buildMonthChips() {
   const now = new Date();
-  // collect all months that have expense transactions, plus current month
   const monthSet = new Set();
   monthSet.add(now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0'));
   S.transactions.filter(t => t.type === 'expense').forEach(t => {
@@ -729,36 +768,74 @@ function buildMonthChips() {
       monthSet.add(d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'));
     } catch(e) {}
   });
-  // sort descending (most recent first)
   const months = Array.from(monthSet).sort((a,b) => b.localeCompare(a));
 
   const el = document.getElementById('monthChips');
-  let html = `<button class="pbtn${dashPeriod==='all'?' on':''}" onclick="setPeriod('all')">All Time</button>`;
+  const isCustom = dashPeriod === 'custom';
+  const isAll    = dashPeriod === 'all';
+
+  let html = `<button class="pbtn${isAll?' on':''}" onclick="setPeriod('all')">All Time</button>`;
   months.forEach(m => {
     const [yr, mo] = m.split('-');
     const lbl = new Date(parseInt(yr), parseInt(mo)-1, 1)
       .toLocaleString('en-IN', {month:'short', year:'2-digit'});
     html += `<button class="pbtn${dashPeriod===m?' on':''}" onclick="setPeriod('${m}')">${lbl}</button>`;
   });
+  // Custom chip always at the end
+  html += `<button class="pbtn${isCustom?' on':''}" onclick="openCustomRange()">🗓 Custom</button>`;
   el.innerHTML = html;
 
-  // default to current month if not set
   if (!dashPeriod) {
     dashPeriod = months[0] || 'all';
-    el.querySelector(`[onclick="setPeriod('${dashPeriod}')"]`)?.classList.add('on');
   }
 
-  // scroll selected chip into view
+  // Show/hide custom range box
+  const box = document.getElementById('customRangeBox');
+  box.style.display = isCustom ? 'block' : 'none';
+
   setTimeout(() => {
     const active = el.querySelector('.pbtn.on');
     if (active) active.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
   }, 100);
 }
 
+function openCustomRange() {
+  dashPeriod = 'custom';
+  // Pre-fill with sensible defaults (first & last of current month)
+  const now = new Date();
+  const y = now.getFullYear(), m = String(now.getMonth()+1).padStart(2,'0');
+  const lastDay = new Date(y, now.getMonth()+1, 0).getDate();
+  const fromEl = document.getElementById('customFrom');
+  const toEl   = document.getElementById('customTo');
+  if (!fromEl.value) fromEl.value = `${y}-${m}-01`;
+  if (!toEl.value)   toEl.value   = `${y}-${m}-${String(lastDay).padStart(2,'0')}`;
+  buildMonthChips(); // show the box + highlight chip
+}
+
+function applyCustomRange() {
+  const from = document.getElementById('customFrom').value;
+  const to   = document.getElementById('customTo').value;
+  if (!from || !to) { toast('Select both From and To dates', 'err'); return; }
+  if (from > to)    { toast('From date must be before To date', 'err'); return; }
+  customFrom = from;
+  customTo   = to;
+  expandedCards.clear();
+  activeDayKey = null;
+  renderDash();
+}
+
 function getDashTxs() {
   return S.transactions.filter(t => {
     if (t.type !== 'expense') return false;
     if (dashPeriod === 'all') return true;
+    if (dashPeriod === 'custom') {
+      if (!customFrom || !customTo) return false;
+      try {
+        const d = new Date(t.date);
+        const key = d.toISOString().slice(0,10); // YYYY-MM-DD
+        return key >= customFrom && key <= customTo;
+      } catch(e) { return false; }
+    }
     try {
       const d = new Date(t.date);
       const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
@@ -769,6 +846,11 @@ function getDashTxs() {
 
 function periodLabel() {
   if (dashPeriod === 'all') return 'All Time';
+  if (dashPeriod === 'custom') {
+    if (!customFrom || !customTo) return 'Custom Range';
+    const fmt2 = d => new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    return fmt2(customFrom) + ' – ' + fmt2(customTo);
+  }
   try {
     const [yr, mo] = dashPeriod.split('-');
     return new Date(parseInt(yr), parseInt(mo)-1, 1)
@@ -778,16 +860,20 @@ function periodLabel() {
 
 function setPeriod(p) {
   dashPeriod = p;
-  buildMonthChips(); // re-render chips to update active state
+  if (p !== 'custom') document.getElementById('customRangeBox').style.display = 'none';
+  buildMonthChips();
   expandedCards.clear();
+  activeDayKey = null;
   renderDash();
 }
 
 function setDashView(v) {
   dashView = v;
+  activeDayKey = null;
   document.getElementById('dv0').className = 'dvbtn' + (v==='cat' ? ' on' : '');
   document.getElementById('dv1').className = 'dvbtn' + (v==='pay' ? ' on' : '');
-  document.getElementById('dashSec').textContent = v === 'cat' ? 'Expense by Category' : 'Expense by Payment Mode';
+  document.getElementById('dv2').className = 'dvbtn' + (v==='day' ? ' on' : '');
+  document.getElementById('dashSec').textContent = v==='cat' ? 'Expense by Category' : v==='pay' ? 'Expense by Payment Mode' : 'Day-wise Expenses';
   expandedCards.clear();
   renderDash();
 }
@@ -795,6 +881,7 @@ function setDashView(v) {
 function renderDash() {
   buildMonthChips();
   if (dashView === 'pay') renderDashPay();
+  else if (dashView === 'day') renderDashDay();
   else renderDashCat();
 }
 
@@ -963,6 +1050,130 @@ function renderDashPay() {
 
   html += '<div class="dash-pb"></div>';
   el.innerHTML = html;
+}
+
+
+// ── DAY WISE VIEW ──
+function renderDashDay() {
+  const txs = getDashTxs();
+  const el = document.getElementById('dashGrid');
+
+  if (!txs.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ico">📅</div><div class="empty-nm">No expense data</div><div>Add transactions to see day-wise analysis</div></div>`;
+    return;
+  }
+
+  // Group by date key YYYY-MM-DD, sorted asc
+  const byDay = {};
+  txs.forEach(t => {
+    try {
+      const d = new Date(t.date);
+      const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      const lbl = d.getDate(); // day number only
+      if (!byDay[key]) byDay[key] = { key, lbl, txs:[], total:0 };
+      byDay[key].txs.push(t);
+      byDay[key].total += t.amount;
+    } catch(e) {}
+  });
+
+  const days = Object.values(byDay).sort((a,b) => a.key.localeCompare(b.key));
+  const maxAmt = Math.max(...days.map(d => d.total));
+  const totalExp = txs.reduce((a,t) => a+t.amount, 0);
+  const avgDaily = totalExp / days.length;
+
+  // Summary card
+  let html = summaryCard(
+    totalExp, txs.length, days.length, days.length===1?'day':'days',
+    '#ffbe3d', '#ff5f7e',
+    `avg ₹${fmt(avgDaily)}/day`
+  );
+
+  // Bar chart
+  html += `<div class="day-chart">`;
+  days.forEach(d => {
+    const barPct = maxAmt > 0 ? (d.total / maxAmt) * 100 : 0;
+    const isActive = activeDayKey === d.key;
+    html += `<div class="day-bar-wrap${isActive?' active':''}" onclick="toggleDayDetail('${d.key}')">
+      <div class="day-bar-outer" style="height:${Math.max(barPct,4)}px;flex:1;min-height:4px;position:relative">
+        <div class="day-bar-inner" style="height:100%"></div>
+      </div>
+      <div class="day-lbl${isActive?' active':''}">${d.lbl}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Avg line hint
+  html += `<div style="font-size:11px;color:var(--mt);text-align:center;margin-bottom:12px">
+    Tap a bar to see that day's transactions
+  </div>`;
+
+  // Day detail panel
+  if (activeDayKey && byDay[activeDayKey]) {
+    const day = byDay[activeDayKey];
+    const dt = new Date(activeDayKey);
+    const dateStr = dt.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long' });
+    const sortedTxs = [...day.txs].sort((a,b) => b.amount - a.amount);
+
+    html += `<div class="day-detail">
+      <div class="day-detail-head">
+        <div class="day-detail-title">📅 ${dateStr}</div>
+        <div class="day-detail-total">₹${fmt(day.total)}</div>
+      </div>`;
+
+    sortedTxs.forEach(t => {
+      const cat = S.categories[t.majorCategory];
+      const icon = cat?.icon || '📦';
+      const color = cat?.color || '#6c63ff';
+      const pm = S.payments.find(p => p.name === t.paymentMode);
+      html += `<div class="day-tx">
+        <div class="day-tx-ico">${icon}</div>
+        <div class="day-tx-info">
+          <div class="day-tx-nm">${t.subCategory || t.majorCategory || '—'}</div>
+          <div class="day-tx-sub">${t.majorCategory}${pm ? ' · '+pm.icon+' '+pm.name : ''}${t.notes ? ' · '+t.notes : ''}</div>
+        </div>
+        <div class="day-tx-amt">₹${fmt(t.amount)}</div>
+      </div>`;
+    });
+
+    html += `</div>`;
+  }
+
+  // All days list (sorted desc by amount)
+  const sortedDays = [...days].sort((a,b) => b.total - a.total);
+  html += `<div class="sec" style="margin-top:4px">All Days Ranked</div>`;
+  sortedDays.forEach((d, rank) => {
+    const dt = new Date(d.key);
+    const dateStr = dt.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short' });
+    const pct = totalExp > 0 ? Math.round((d.total/totalExp)*100) : 0;
+    const isActive = activeDayKey === d.key;
+    html += `<div class="dcard${isActive?' xopen':''}" onclick="toggleDayDetail('${d.key}')" style="cursor:pointer">
+      <div class="dcard-head">
+        <div class="dcard-ico" style="background:var(--s2);font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--mt)">#${rank+1}</div>
+        <div class="dcard-info">
+          <div class="dcard-name">${dateStr}</div>
+          <div class="dcard-meta">${d.txs.length} txn${d.txs.length!==1?'s':''} · ${pct}% of month</div>
+        </div>
+        <div class="dcard-amt" style="color:var(--yw)">₹${fmt(d.total)}</div>
+        <div class="dcard-chv${isActive?' open':''}" style="color:var(--mt);font-size:11px;transition:transform .22s${isActive?';transform:rotate(180deg)':''}">▼</div>
+      </div>
+      <div class="dbar-wrap" style="padding:0 15px 12px">
+        <div class="dbar-bg"><div class="dbar-fill" style="width:${pct}%;background:linear-gradient(90deg,var(--yw),var(--ac2))"></div></div>
+      </div>
+    </div>`;
+  });
+
+  html += '<div class="dash-pb"></div>';
+  el.innerHTML = html;
+}
+
+function toggleDayDetail(key) {
+  activeDayKey = activeDayKey === key ? null : key;
+  renderDashDay();
+  // scroll chart into view
+  setTimeout(() => {
+    const chart = document.querySelector('.day-chart');
+    if (chart) chart.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 50);
 }
 
 function toggleCard(kid) {
