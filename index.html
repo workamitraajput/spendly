@@ -775,14 +775,13 @@ function buildMonthChips() {
   const isAll    = dashPeriod === 'all';
 
   let html = `<button class="pbtn${isAll?' on':''}" onclick="setPeriod('all')">All Time</button>`;
+  html += `<button class="pbtn${isCustom?' on':''}" onclick="openCustomRange()">🗓 Custom</button>`;
   months.forEach(m => {
     const [yr, mo] = m.split('-');
     const lbl = new Date(parseInt(yr), parseInt(mo)-1, 1)
       .toLocaleString('en-IN', {month:'short', year:'2-digit'});
     html += `<button class="pbtn${dashPeriod===m?' on':''}" onclick="setPeriod('${m}')">${lbl}</button>`;
   });
-  // Custom chip always at the end
-  html += `<button class="pbtn${isCustom?' on':''}" onclick="openCustomRange()">🗓 Custom</button>`;
   el.innerHTML = html;
 
   if (!dashPeriod) {
