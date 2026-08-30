@@ -164,7 +164,7 @@
     .dash-pb{padding-bottom:110px}
 
     /* NAV */
-    .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:6px 10px calc(var(--sb)+6px);background:linear-gradient(0deg,#06060f 80%,transparent);display:grid;grid-template-columns:1fr auto 1fr 1fr 1fr;align-items:center;gap:2px;z-index:20}
+    .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:6px 10px calc(var(--sb)+6px);background:linear-gradient(0deg,#06060f 80%,transparent);display:grid;grid-template-columns:1fr auto 1fr 1fr 1fr 1fr 1fr;align-items:center;gap:2px;z-index:20}
     .nv{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--mt);font-size:10px;cursor:pointer;padding:7px 8px;border-radius:12px}
     .nv.on{color:var(--ac)}
     .nv svg{width:20px;height:20px}
@@ -230,7 +230,7 @@
     .linf{flex:1;min-width:0}
     .lnm{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .lsub{font-size:11px;color:var(--mt)}
-    .lacts{display:flex;gap:5px}
+    .lacts{display:flex;gap:5px;flex-shrink:0}
     .act-btn{background:none;border:1px solid var(--b);border-radius:8px;padding:5px 8px;font-size:12px;cursor:pointer;color:var(--mt)}
     .act-btn.edit{border-color:rgba(108,99,255,.4);color:var(--ac)}
     .act-btn.del{border-color:rgba(255,69,69,.3);color:var(--rd)}
@@ -240,7 +240,8 @@
     .mini{background:var(--ac);border:none;border-radius:12px;padding:0 12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0}
     .type-tog{flex:1;background:var(--s2);border:1px solid var(--b);border-radius:11px;padding:9px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--mt);cursor:pointer}
     .type-tog.on{background:var(--ac);border-color:var(--ac);color:#fff}
-    .emodal{background:var(--s2);border:1px solid var(--b2);border-radius:18px;padding:16px;margin-bottom:12px;display:none}
+    .emodal{background:var(--s2);border:1px solid var(--b2);border-radius:18px;padding:16px;margin-bottom:12px;display:none;pointer-events:none}
+    .emodal.open{pointer-events:auto}
     .emodal.open{display:block}
     .emodal-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:10px;color:var(--ac)}
     .erow{display:flex;gap:6px;margin-bottom:0}
@@ -279,6 +280,61 @@
     .stx-nm{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .stx-meta{font-size:10px;color:var(--mt);margin-top:1px}
     .stx-amt{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;flex-shrink:0}
+    /* ── ACCOUNTS ── */
+    .acc-card{border-radius:20px;padding:16px 18px;margin-bottom:10px;position:relative;overflow:hidden}
+    .acc-card::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
+    .acc-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .acc-ico{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(255,255,255,.12)}
+    .acc-info{flex:1;min-width:0}
+    .acc-nm{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+    .acc-type{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;margin-top:2px;opacity:.7}
+    .acc-bal-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;opacity:.7;margin-bottom:3px}
+    .acc-bal{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-1px}
+    .acc-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+    .acc-stat{background:rgba(0,0,0,.2);border-radius:10px;padding:8px 11px}
+    .acc-stat-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;opacity:.65;margin-bottom:3px}
+    .acc-stat-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+    .acc-due{background:rgba(255,69,69,.2);border:1px solid rgba(255,69,69,.3);border-radius:10px;padding:7px 12px;margin-top:8px;font-size:12px;display:flex;align-items:center;gap:6px}
+    .acc-due.ok{background:rgba(61,220,132,.15);border-color:rgba(61,220,132,.3);color:var(--gn)}
+    .acc-cc-bar{height:5px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden;margin-top:8px}
+    .acc-cc-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255,255,255,.4))}
+    .acc-total-card{background:linear-gradient(135deg,#140d2e,#0d1a2e);border:1px solid rgba(108,99,255,.2);border-radius:20px;padding:16px 18px;margin-bottom:10px}
+    .acc-total-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+    .acc-total-cell{background:rgba(255,255,255,.05);border-radius:10px;padding:10px 12px;text-align:center}
+    .acc-total-cell-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--mt);margin-bottom:4px}
+    .acc-total-cell-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:800}
+    /* trf type tog */
+    .tg.trf{background:linear-gradient(135deg,#00bcd4,#6c63ff);color:#fff}
+
+    /* ── INVESTMENTS ── */
+    .inv-summary{background:linear-gradient(135deg,#0d2e1a,#0d1a2e);border:1px solid rgba(61,220,132,.2);border-radius:20px;padding:16px 18px;margin-bottom:10px}
+    .inv-card{background:var(--s1);border:1px solid var(--b);border-radius:18px;margin-bottom:10px;overflow:hidden;cursor:pointer}
+    .inv-card:active{background:var(--s2)}
+    .inv-head{display:flex;align-items:center;gap:12px;padding:14px 16px}
+    .inv-ico{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+    .inv-info{flex:1;min-width:0}
+    .inv-nm{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .inv-meta{font-size:11px;color:var(--mt);margin-top:2px}
+    .inv-right{text-align:right;flex-shrink:0}
+    .inv-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:800}
+    .inv-pl{font-size:11px;margin-top:2px;font-weight:600}
+    .inv-pl.pos{color:var(--gn)} .inv-pl.neg{color:var(--rd)} .inv-pl.neu{color:var(--mt)}
+    /* person group header */
+    .inv-person-hd{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--mt);padding:12px 4px 6px;border-bottom:1px solid var(--b);margin-bottom:8px}
+    /* Statement */
+    .stmt-card{background:var(--s1);border:1px solid var(--b);border-radius:16px;overflow:hidden;margin-bottom:12px}
+    .stmt-head{padding:12px 16px;border-bottom:1px solid var(--b);display:flex;justify-content:space-between;align-items:center}
+    .stmt-row{display:flex;align-items:center;gap:10px;padding:10px 15px}
+    .stmt-row:not(:last-child){border-bottom:1px solid rgba(255,255,255,.04)}
+    .stmt-ico{font-size:16px;width:22px;text-align:center;flex-shrink:0}
+    .stmt-info{flex:1;min-width:0}
+    .stmt-nm{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .stmt-dt{font-size:10px;color:var(--mt);margin-top:1px}
+    .stmt-amt{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;flex-shrink:0}
+    .stmt-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+    .stmt-sum-cell{background:var(--s1);border:1px solid var(--b);border-radius:12px;padding:10px 12px;text-align:center}
+    .stmt-sum-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--mt);margin-bottom:3px}
+    .stmt-sum-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:800}
     /* ── DAY WISE ── */
     .day-chart{display:flex;align-items:flex-end;gap:4px;height:100px;padding:0 2px;margin-bottom:14px}
     .day-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;gap:3px;min-width:0}
@@ -339,6 +395,8 @@
       <button class="tab on" id="tabDash" onclick="switchTab('dash')">Analysis</button>
       <button class="tab"    id="tabBud"  onclick="switchTab('bud')">Budget</button>
       <button class="tab"    id="tabPty"  onclick="switchTab('pty')">Parties</button>
+      <button class="tab"    id="tabAcc"  onclick="switchTab('acc')">Accounts</button>
+      <button class="tab"    id="tabInv"  onclick="switchTab('inv')">Invest</button>
     </div>
   </div>
 
@@ -369,7 +427,14 @@
         </div>
         <button onclick="applyCustomRange()" style="width:100%;background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;border-radius:11px;padding:11px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer">Apply Range</button>
       </div>
-      <div class="dvrow">
+      <!-- Row 1: Expense | Income | Transfers -->
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <button class="dvbtn on" id="dashTypeExp" onclick="setDashType('expense')" style="flex:1">💸 Expense</button>
+        <button class="dvbtn"    id="dashTypeInc" onclick="setDashType('income')"  style="flex:1">💰 Income</button>
+        <button class="dvbtn"    id="dv3"         onclick="setDashView('trf')"     style="flex:1">⇄ Transfers</button>
+      </div>
+      <!-- Row 2: sub-views (Category, Payment, Day Wise) -->
+      <div class="dvrow" id="dashViewRow">
         <button class="dvbtn on" id="dv0" onclick="setDashView('cat')">📦 Category</button>
         <button class="dvbtn"    id="dv1" onclick="setDashView('pay')">💳 Payment</button>
         <button class="dvbtn"    id="dv2" onclick="setDashView('day')">📅 Day Wise</button>
@@ -386,6 +451,42 @@
         <button onclick="openAddParty()" style="background:var(--ac);border:none;border-radius:10px;padding:6px 13px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer;margin-top:6px">+ Party</button>
       </div>
       <div id="partyList"></div>
+      <div style="height:110px"></div>
+    </div>
+
+    <!-- ACCOUNTS -->
+    <div id="vAcc" style="display:none">
+      <!-- Sub-tabs -->
+      <div style="display:flex;gap:6px;margin:10px 0 12px">
+        <button class="dvbtn on" id="accTab0" onclick="setAccTab('overview')" style="flex:1">🏦 Overview</button>
+        <button class="dvbtn"    id="accTab1" onclick="setAccTab('statement')" style="flex:1">📋 Statement</button>
+      </div>
+      <!-- Overview -->
+      <div id="accOverview">
+        <div id="accList"></div>
+      </div>
+      <!-- Statement -->
+      <div id="accStatement" style="display:none">
+        <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
+          <select class="inp" id="stmtAcc" style="margin-bottom:0;flex:1.5" onchange="renderStatement()">
+            <option value="">— Select Account —</option>
+          </select>
+          <input type="month" id="stmtMonth" class="inp" style="margin-bottom:0;flex:1;color-scheme:dark" onchange="renderStatement()"/>
+        </div>
+        <div id="stmtList"></div>
+      </div>
+      <div style="height:110px"></div>
+    </div>
+
+    <!-- INVESTMENTS -->
+    <div id="vInv" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 9px">
+        <div class="sec" style="margin:0">Investments</div>
+        <button onclick="openAddInvestment()" style="background:var(--ac);border:none;border-radius:10px;padding:6px 13px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer">+ Add</button>
+      </div>
+      <!-- person filter chips -->
+      <div class="chips" id="invPersonChips" style="margin-bottom:10px"></div>
+      <div id="invPortfolio"></div>
       <div style="height:110px"></div>
     </div>
 
@@ -417,6 +518,14 @@
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Parties
     </button>
+    <button class="nv" id="nvAcc" onclick="switchTab('acc')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h20" stroke-linecap="round"/></svg>
+      Accounts
+    </button>
+    <button class="nv" id="nvInv" onclick="switchTab('inv')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Invest
+    </button>
   </div>
 </div>
 
@@ -425,21 +534,46 @@
   <div class="sheet">
     <div class="handle"></div>
     <div class="stitle">Add Transaction</div>
-    <div class="tog2">
-      <button class="tg exp" id="tgExp" onclick="setType('expense')">Expense</button>
-      <button class="tg"     id="tgInc" onclick="setType('income')">Income</button>
+    <div class="tog2" style="grid-template-columns:1fr 1fr 1fr">
+      <button class="tg exp" id="tgExp"      onclick="setType('expense')">Expense</button>
+      <button class="tg"     id="tgInc"      onclick="setType('income')">Income</button>
+      <button class="tg"     id="tgTransfer" onclick="setType('transfer')" style="font-size:11px">⇄ Transfer</button>
     </div>
-    <div class="wbox" id="budWarn"></div>
-    <label class="lbl">Amount (₹)</label>
-    <input class="inp big" id="addAmt" type="number" inputmode="decimal" placeholder="0"/>
-    <label class="lbl">Date</label>
-    <input class="inp" id="addDate" type="date"/>
-    <label class="lbl">Sub Category</label>
-    <select class="inp" id="subSel"><option value="">— Select —</option></select>
-    <label class="lbl">Payment Mode</label>
-    <select class="inp" id="paySel"><option value="">— Select —</option></select>
-    <label class="lbl">Notes (optional)</label>
-    <input class="inp" id="addNotes" placeholder="e.g. monthly grocery run"/>
+
+    <!-- Normal expense/income fields -->
+    <div id="normalFields">
+      <div class="wbox" id="budWarn"></div>
+      <label class="lbl">Amount (₹)</label>
+      <input class="inp big" id="addAmt" type="number" inputmode="decimal" placeholder="0"/>
+      <label class="lbl">Date</label>
+      <input class="inp" id="addDate" type="date"/>
+      <label class="lbl">Sub Category</label>
+      <select class="inp" id="subSel"><option value="">— Select sub-category —</option></select>
+      <label class="lbl">Payment Mode</label>
+      <select class="inp" id="paySel"><option value="">— Select —</option></select>
+      <label class="lbl">Notes (optional)</label>
+      <input class="inp" id="addNotes" placeholder="e.g. monthly grocery run"/>
+    </div>
+
+    <!-- Transfer fields -->
+    <div id="transferFields" style="display:none">
+      <label class="lbl">Transfer Type</label>
+      <div style="display:flex;gap:6px;margin-bottom:14px">
+        <button class="type-tog on" id="trfBank" onclick="setTrfType('bank')">🏦 Bank→Bank</button>
+        <button class="type-tog"    id="trfCC"   onclick="setTrfType('cc')">💳 Pay Credit Card</button>
+      </div>
+      <label class="lbl">Amount (₹)</label>
+      <input class="inp big" id="trfAmt" type="number" inputmode="decimal" placeholder="0"/>
+      <label class="lbl">Date</label>
+      <input class="inp" id="trfDate" type="date"/>
+      <label class="lbl">From Account (Bank)</label>
+      <select class="inp" id="trfFrom"><option value="">— Select source —</option></select>
+      <label class="lbl">To Account</label>
+      <select class="inp" id="trfTo"><option value="">— Select destination —</option></select>
+      <label class="lbl">Notes (optional)</label>
+      <input class="inp" id="trfNotes" placeholder="e.g. credit card payment"/>
+    </div>
+
     <button class="sbtn" id="saveTxBtn" onclick="saveTx()">Add Transaction</button>
   </div>
 </div>
@@ -507,27 +641,72 @@
       <div id="catList"></div>
     </div>
 
-    <!-- PAYMENTS -->
+    <!-- PAYMENTS / ACCOUNTS -->
     <div class="mview" id="mv1">
-      <div class="sec" style="margin-top:0">Add Payment Mode</div>
+      <div class="sec" style="margin-top:0">Add Account / Payment Mode</div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+        <button class="type-tog on" id="ptBank"   onclick="setPayType('bank')">🏦 Bank</button>
+        <button class="type-tog"    id="ptCC"     onclick="setPayType('cc')">💳 Credit Card</button>
+        <button class="type-tog"    id="ptCash"   onclick="setPayType('cash')">💵 Cash</button>
+        <button class="type-tog"    id="ptWallet" onclick="setPayType('wallet')">📲 Wallet</button>
+      </div>
       <div class="arow">
-        <input class="inp" id="mPayNm" placeholder="e.g. HDFC Credit Card"/>
-        <input class="inp xsm" id="mPayIco" placeholder="💳"/>
+        <input class="inp" id="mPayNm" placeholder="e.g. HDFC Savings"/>
+        <input class="inp xsm" id="mPayIco" placeholder="🏦"/>
         <button class="mini" onclick="addPay()">Add</button>
       </div>
+      <!-- Bank: opening balance -->
+      <div id="payExtraBank" style="display:block">
+        <label class="lbl">Opening Balance (₹)</label>
+        <input class="inp" id="mPayOpenBal" type="number" inputmode="decimal" placeholder="0"/>
+      </div>
+      <!-- Credit Card: limit + billing cycle + due date -->
+      <div id="payExtraCC" style="display:none">
+        <label class="lbl">Credit Limit (₹)</label>
+        <input class="inp" id="mPayLimit" type="number" inputmode="decimal" placeholder="0"/>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <label class="lbl">Bill Generation Date <span style="font-size:9px;color:var(--mt)">(day of month)</span></label>
+            <input class="inp" id="mPayBillDay" type="number" inputmode="numeric" placeholder="e.g. 1" min="1" max="31"/>
+          </div>
+          <div>
+            <label class="lbl">Payment Due Date <span style="font-size:9px;color:var(--mt)">(day of month)</span></label>
+            <input class="inp" id="mPayDue" type="number" inputmode="numeric" placeholder="e.g. 21" min="1" max="31"/>
+          </div>
+        </div>
+        <div style="background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.2);border-radius:10px;padding:10px 12px;font-size:11px;color:var(--mt);line-height:1.6">
+          💡 Example: Bill generated on <b style="color:var(--tx)">1st</b>, payment due on <b style="color:var(--tx)">21st</b> of next month.<br>
+          Expenses from <b style="color:var(--tx)">1st to 31st</b> appear on the bill due <b style="color:var(--tx)">21st next month</b>.
+        </div>
+      </div>
+
+      <div class="sec">Existing</div>
+      <div id="payList"></div>
       <div class="emodal" id="editPayBox">
-        <div class="emodal-title">✏️ Edit Payment Mode</div>
-        <div class="erow">
+        <div class="emodal-title">✏️ Edit Account</div>
+        <div class="erow" style="margin-bottom:10px">
           <input class="inp" id="ePayNm" placeholder="Name"/>
           <input class="inp xsm" id="ePayIco" placeholder="💳"/>
+        </div>
+        <label class="lbl">Opening Balance / Limit (₹)</label>
+        <input class="inp" id="ePayBal" type="number" inputmode="decimal" placeholder="0"/>
+        <div id="ePayCCFields" style="display:none">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <label class="lbl">Bill Generation Date</label>
+              <input class="inp" id="ePayBillDay" type="number" inputmode="numeric" placeholder="e.g. 1" min="1" max="31"/>
+            </div>
+            <div>
+              <label class="lbl">Payment Due Date</label>
+              <input class="inp" id="ePayDue" type="number" inputmode="numeric" placeholder="e.g. 21" min="1" max="31"/>
+            </div>
+          </div>
         </div>
         <div class="ebtns">
           <button class="ebtn cancel" onclick="closeEditPay()">Cancel</button>
           <button class="ebtn save"   onclick="saveEditPay()">Save</button>
         </div>
       </div>
-      <div class="sec">Existing</div>
-      <div id="payList"></div>
     </div>
 
     <!-- BUDGETS -->
@@ -595,6 +774,103 @@
   </div>
 </div>
 
+
+<!-- ══ ADD INVESTMENT ══ -->
+<div class="overlay" id="addInvOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="stitle">New Investment</div>
+    <label class="lbl">Investment Type</label>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+      <button class="type-tog on" id="invTypeMF"     onclick="setInvType('MF')">📈 Mutual Fund</button>
+      <button class="type-tog"    id="invTypeEQ"     onclick="setInvType('Equity')">📊 Equity</button>
+      <button class="type-tog"    id="invTypeFD"     onclick="setInvType('FD')">🏦 FD</button>
+      <button class="type-tog"    id="invTypePPF"    onclick="setInvType('PPF')">📗 PPF</button>
+      <button class="type-tog"    id="invTypeOther"  onclick="setInvType('Other')">💼 Other</button>
+    </div>
+    <label class="lbl">Investment Name</label>
+    <input class="inp" id="invName" placeholder="e.g. HDFC Top 100, Reliance, SBI FD"/>
+    <label class="lbl">Held In (Person)</label>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <select class="inp" id="invPerson" style="margin-bottom:0;flex:1">
+        <option value="Self">Self</option>
+        <option value="Wife">Wife</option>
+        <option value="Father">Father</option>
+        <option value="Mother">Mother</option>
+        <option value="Child">Child</option>
+        <option value="Other">Other</option>
+      </select>
+      <input class="inp" id="invPersonCustom" placeholder="Name (if Other)" style="margin-bottom:0;flex:1;display:none"/>
+    </div>
+    <label class="lbl">Linked Bank Account</label>
+    <select class="inp" id="invBank"><option value="">— None —</option></select>
+    <div id="invFDFields" style="display:none">
+      <label class="lbl">FD Maturity Date</label>
+      <input class="inp" id="invMaturity" type="date"/>
+      <label class="lbl">Interest Rate (% p.a.)</label>
+      <input class="inp" id="invRate" type="number" inputmode="decimal" placeholder="e.g. 7.5"/>
+    </div>
+    <label class="lbl">Notes (optional)</label>
+    <input class="inp" id="invNotes" placeholder="e.g. Demat account no., FD no."/>
+    <button class="sbtn" onclick="saveInvestment()">Create Investment</button>
+  </div>
+</div>
+
+<!-- ══ INVESTMENT DETAIL ══ -->
+<div class="overlay" id="invDetailOv">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div id="invDetailIco" style="width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--s2);flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <div id="invDetailNm" style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800"></div>
+        <div id="invDetailMeta" style="font-size:12px;color:var(--mt);margin-top:2px"></div>
+      </div>
+      <button onclick="deleteInvestment()" style="background:rgba(255,69,69,.12);border:1px solid rgba(255,69,69,.3);border-radius:10px;padding:7px 10px;font-size:12px;color:var(--rd);cursor:pointer">🗑</button>
+    </div>
+
+    <!-- Add Entry -->
+    <div style="background:var(--s2);border-radius:14px;padding:14px;margin-bottom:16px">
+      <div class="sec" style="margin:0 0 10px">Add Entry</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px">
+        <button class="type-tog on" id="invEntryBuy"  onclick="setInvEntry('buy')">↓ Buy/Deposit</button>
+        <button class="type-tog"    id="invEntrySell" onclick="setInvEntry('sell')">↑ Sell/Withdraw</button>
+      </div>
+      <label class="lbl">Amount (₹)</label>
+      <input class="inp" id="invEntryAmt" type="number" inputmode="decimal" placeholder="0"/>
+      <div id="invEntryUnitFields" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+          <div>
+            <label class="lbl">Units</label>
+            <input class="inp" id="invEntryUnits" type="number" inputmode="decimal" placeholder="0" style="margin-bottom:0"/>
+          </div>
+          <div>
+            <label class="lbl">NAV / Price (₹)</label>
+            <input class="inp" id="invEntryNav" type="number" inputmode="decimal" placeholder="0" style="margin-bottom:0"/>
+          </div>
+        </div>
+      </div>
+      <label class="lbl">Date</label>
+      <input class="inp" id="invEntryDate" type="date"/>
+      <label class="lbl">Notes</label>
+      <input class="inp" id="invEntryNote" placeholder="e.g. SIP, lumpsum, bonus"/>
+      <button class="sbtn" onclick="addInvEntry()">Add Entry</button>
+    </div>
+
+    <!-- Current Value -->
+    <div style="background:var(--s2);border-radius:14px;padding:14px;margin-bottom:16px">
+      <div class="sec" style="margin:0 0 10px">Update Current Value</div>
+      <div style="display:flex;gap:8px">
+        <input class="inp" id="invCurVal" type="number" inputmode="decimal" placeholder="Current market value ₹" style="margin-bottom:0;flex:1"/>
+        <button class="mini" onclick="saveInvCurrentValue()">Save</button>
+      </div>
+    </div>
+
+    <div class="sec" style="margin-top:0">Transaction History</div>
+    <div id="invEntryList"></div>
+    <div style="height:20px"></div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -602,40 +878,76 @@
 //  STATE
 // ══════════════════════════════════════
 let URL_ = localStorage.getItem('spendly_url') || '';
-let S = { categories:{}, payments:[], budgets:{}, transactions:[], parties:[] };
+let S = { categories:{}, payments:[], budgets:{}, transactions:[], parties:[], investments:[] };
+let newPayType = 'bank';    // account type for add-payment form
+let editPayAccType = 'bank'; // account type for edit-payment form
+let trfType = 'bank';       // transfer type
 let txType = 'expense', filterCat = 'all', curTab = 'dash';
 let newMajType = 'expense', editMajType = 'expense';
 let editMajorOld = '', editSubMajor = '', editSubOld = '', editPayId = '';
-const _now = new Date(); let dashPeriod = _now.getFullYear()+'-'+String(_now.getMonth()+1).padStart(2,'0'), dashView = 'cat', activeDayKey = null, customFrom = '', customTo = '';
+const _now = new Date(); let dashPeriod = _now.getFullYear()+'-'+String(_now.getMonth()+1).padStart(2,'0'), dashView = 'cat', dashType = 'expense', activeDayKey = null, customFrom = '', customTo = '';
 let expandedCards = new Set();
 let toastT;
 
 // ══════════════════════════════════════
 //  BOOT
 // ══════════════════════════════════════
-if (URL_) boot();
+if (URL_) {
+  // Boot immediately — syncAll will handle errors
+  boot();
+}
 
-function boot() {
+function boot(dataReady) {
   document.getElementById('setup').classList.add('gone');
   document.getElementById('app').style.display = 'flex';
   document.getElementById('settingsBtn').onclick = openManage;
   document.getElementById('fabBtn').onclick = openAdd;
-  document.getElementById('subSel').addEventListener('change', checkBudWarn);
-  syncAll();
+  const subSel = document.getElementById('subSel');
+  subSel.removeEventListener('change', checkBudWarn);
+  subSel.addEventListener('change', checkBudWarn);
+  switchTab('dash');
+  if (dataReady) {
+    // Data already loaded — just render
+    renderAll();
+    setSyn('synced', 'Synced');
+    setTimeout(() => setSyn('', 'Sync'), 3000);
+  } else {
+    // Need to fetch
+    setSyn('syncing', 'Loading…');
+    syncAll();
+  }
 }
 
 async function connect() {
   const url = document.getElementById('scriptUrl').value.trim();
   const err = document.getElementById('serr');
+  const btn = document.querySelector('#setup .bg');
   err.style.display = 'none';
   if (!url.includes('script.google.com')) {
     err.style.display = 'block';
     err.textContent = '⚠️ Paste a valid Google Apps Script Web App URL';
     return;
   }
-  URL_ = url;
-  localStorage.setItem('spendly_url', url);
-  boot();
+  btn.textContent = 'Connecting…';
+  btn.disabled = true;
+  try {
+    const res  = await fetch(url + '?action=getData', { redirect: 'follow' });
+    const text = await res.text();
+    let d;
+    try { d = JSON.parse(text); } catch(e) {
+      throw new Error('Unexpected response — check Code.gs is deployed correctly.');
+    }
+    if (!d.ok) throw new Error(d.error || 'Script error — check deployment.');
+    // Store data and boot WITHOUT fetching again
+    URL_ = url; localStorage.setItem('spendly_url', url);
+    applyData(d);   // load data directly from this response
+    boot(true);     // true = skip syncAll since we already have data
+  } catch(e) {
+    err.style.display = 'block';
+    err.textContent = '⚠️ ' + e.message;
+    btn.textContent = 'Connect & Start →';
+    btn.disabled = false;
+  }
 }
 
 // ══════════════════════════════════════
@@ -654,16 +966,21 @@ async function API(params) {
 // ══════════════════════════════════════
 //  SYNC
 // ══════════════════════════════════════
+function applyData(d) {
+  S.categories   = d.categories  || {};
+  S.payments     = d.payments    || [];
+  S.budgets      = d.budgets     || {};
+  S.transactions = (d.transactions || []).sort((a,b) => b.id - a.id);
+  S.parties      = d.parties     || [];
+  S.investments  = d.investments  || [];
+}
+
 async function syncAll() {
   setSyn('syncing', 'Syncing…');
   try {
     const d = await API({ action: 'getData' });
     if (!d.ok) throw new Error(d.error || 'Sync failed');
-    S.categories   = d.categories  || {};
-    S.payments     = d.payments    || [];
-    S.budgets      = d.budgets     || {};
-    S.transactions = (d.transactions || []).sort((a,b) => b.id - a.id);
-    S.parties      = d.parties     || [];
+    applyData(d);
     renderAll();
     setSyn('synced', 'Synced');
     setTimeout(() => setSyn('', 'Sync'), 3000);
@@ -685,10 +1002,12 @@ function renderAll() {
   renderBal(); renderChips(); renderTxList(); renderBudGrid();
   if (curTab === 'dash') renderDash();
   if (curTab === 'pty') renderParties();
+  if (curTab === 'acc') renderAccounts();
+  if (curTab === 'inv') renderInvestments();
 }
 
 function renderBal() {
-  const txs = S.transactions.filter(t => inMonth(t.date));
+  const txs = S.transactions.filter(t => inMonth(t.date) && (t.type === 'income' || t.type === 'expense'));
   const inc = txs.filter(t => t.type === 'income').reduce((a,t) => a + t.amount, 0);
   const exp = txs.filter(t => t.type === 'expense').reduce((a,t) => a + t.amount, 0);
   document.getElementById('netBal').textContent = fmt(inc - exp);
@@ -709,7 +1028,11 @@ function renderChips() {
 }
 
 function renderTxList() {
-  let txs = S.transactions.filter(t => inMonth(t.date));
+  let txs = S.transactions.filter(t => {
+    if (!inMonth(t.date)) return false;
+    if (t.type === 'transfer-in') return false; // hide receiving side — shown implicitly
+    return true;
+  });
   if (filterCat !== 'all') txs = txs.filter(t => t.majorCategory === filterCat);
   const el = document.getElementById('txList');
   if (!txs.length) {
@@ -717,17 +1040,35 @@ function renderTxList() {
     return;
   }
   el.innerHTML = txs.map(tx => {
-    const cat = S.categories[tx.majorCategory];
-    const col = cat?.color || '#94a3b8';
-    const ico = tx.type === 'income' ? '💰' : (cat?.icon || '📦');
-    const sign = tx.type === 'income' ? '+' : '-';
-    const cls = tx.type === 'income' ? 'cg' : 'cr';
-    const pm = S.payments.find(p => p.name === tx.paymentMode);
-    return `<div class="tx" onclick="delTx('${tx.id}')">
-      <div class="tico" style="background:${col}1a">${ico}</div>
+    const isTransfer = tx.type === 'transfer-out';
+    const isCCPay    = tx.type === 'cc-payment';
+    const isIncome   = tx.type === 'income';
+    const isSpecial  = isTransfer || isCCPay;
+
+    const cat  = S.categories[tx.majorCategory];
+    const col  = isTransfer ? '#00d4ff' : isCCPay ? '#ff8c42' : cat?.color || '#94a3b8';
+    const ico  = isTransfer ? '⇄' : isCCPay ? '💳' : isIncome ? '💰' : (cat?.icon || '📦');
+    const sign = isIncome ? '+' : '-';
+    const cls  = isIncome ? 'cg' : isTransfer ? 'cy' : 'cr';
+    const pm   = S.payments.find(p => p.name === tx.paymentMode);
+
+    // Build subtitle
+    let sub = '';
+    if (isTransfer || isCCPay) {
+      sub = (isTransfer ? '⇄ Transfer' : '💳 CC Payment')
+          + (tx.paymentMode ? ' · ' + tx.paymentMode : '')
+          + ' · ' + fmtD(tx.date);
+    } else {
+      sub = (tx.majorCategory || '')
+          + (pm ? ' · ' + pm.icon + ' ' + pm.name : tx.paymentMode ? ' · ' + tx.paymentMode : '')
+          + ' · ' + fmtD(tx.date);
+    }
+
+    return `<div class="tx" onclick="delTx('${esc(tx.id)}')">
+      <div class="tico" style="background:${col}22">${ico}</div>
       <div class="tinf">
-        <div class="tnm">${tx.subCategory || tx.majorCategory || '—'}</div>
-        <div class="tsub">${tx.majorCategory}${pm ? ' · ' + pm.icon + ' ' + pm.name : tx.paymentMode ? ' · ' + tx.paymentMode : ''} · ${fmtD(tx.date)}</div>
+        <div class="tnm">${tx.subCategory || tx.majorCategory || (isTransfer?'Transfer':isCCPay?'CC Payment':'—')}</div>
+        <div class="tsub">${sub}</div>
         ${tx.notes ? `<div class="tsub" style="font-style:italic">${tx.notes}</div>` : ''}
       </div>
       <div class="tamt ${cls}">${sign}₹${fmt(tx.amount)}</div>
@@ -771,6 +1112,8 @@ function getPalette(i) {
 // ── MONTH PICKER ──
 // dashPeriod = 'YYYY-MM' string for a specific month, or 'all' for all time
 function buildMonthChips() {
+  const el = document.getElementById('monthChips');
+  if (!el) return; // not visible, skip
   const now = new Date();
   const monthSet = new Set();
   monthSet.add(now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0'));
@@ -782,7 +1125,6 @@ function buildMonthChips() {
   });
   const months = Array.from(monthSet).sort((a,b) => b.localeCompare(a));
 
-  const el = document.getElementById('monthChips');
   const isCustom = dashPeriod === 'custom';
   const isAll    = dashPeriod === 'all';
 
@@ -835,24 +1177,31 @@ function applyCustomRange() {
   renderDash();
 }
 
-function getDashTxs() {
+function getTransferTxs() {
+  // Returns all transfer-out and cc-payment txs for the selected period (not transfer-in)
   return S.transactions.filter(t => {
-    if (t.type !== 'expense') return false;
-    if (dashPeriod === 'all') return true;
-    if (dashPeriod === 'custom') {
-      if (!customFrom || !customTo) return false;
-      try {
-        const d = new Date(t.date);
-        const key = d.toISOString().slice(0,10); // YYYY-MM-DD
-        return key >= customFrom && key <= customTo;
-      } catch(e) { return false; }
-    }
-    try {
-      const d = new Date(t.date);
-      const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
-      return key === dashPeriod;
-    } catch(e) { return false; }
+    if (t.type !== 'transfer-out' && t.type !== 'cc-payment') return false;
+    return inDashPeriod(t.date);
   });
+}
+
+function inDashPeriod(dateStr) {
+  if (dashPeriod === 'all') return true;
+  if (dashPeriod === 'custom') {
+    if (!customFrom || !customTo) return false;
+    try { const k = new Date(dateStr).toISOString().slice(0,10); return k >= customFrom && k <= customTo; }
+    catch(e) { return false; }
+  }
+  try {
+    const d = new Date(dateStr);
+    return (d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')) === dashPeriod;
+  } catch(e) { return false; }
+}
+
+function getDashTxs() {
+  return S.transactions.filter(t =>
+    t.type === dashType && inDashPeriod(t.date)
+  );
 }
 
 function periodLabel() {
@@ -878,13 +1227,48 @@ function setPeriod(p) {
   renderDash();
 }
 
+function setDashType(t) {
+  dashType = t;
+  document.getElementById('dashTypeExp').className = 'dvbtn' + (t==='expense' ? ' on' : '');
+  document.getElementById('dashTypeInc').className = 'dvbtn' + (t==='income'  ? ' on' : '');
+  document.getElementById('dv3').className         = 'dvbtn'; // unselect transfers when switching type
+  // If currently on transfers view and switching to income, go to category view
+  if (t === 'income' && dashView === 'trf') {
+    dashView = 'cat';
+  }
+  // Show/hide the sub-view row (Category/Payment/Day) — hide when Transfers active
+  document.getElementById('dashViewRow').style.display = dashView === 'trf' ? 'none' : 'flex';
+  // Highlight correct sub-view button
+  ['dv0','dv1','dv2'].forEach((id,i) => {
+    document.getElementById(id).className = 'dvbtn' + (['cat','pay','day'][i]===dashView ? ' on' : '');
+  });
+  expandedCards.clear();
+  activeDayKey = null;
+  renderDash();
+}
+
 function setDashView(v) {
   dashView = v;
   activeDayKey = null;
+  // Sub-view buttons (cat/pay/day)
   document.getElementById('dv0').className = 'dvbtn' + (v==='cat' ? ' on' : '');
   document.getElementById('dv1').className = 'dvbtn' + (v==='pay' ? ' on' : '');
   document.getElementById('dv2').className = 'dvbtn' + (v==='day' ? ' on' : '');
-  document.getElementById('dashSec').textContent = v==='cat' ? 'Expense by Category' : v==='pay' ? 'Expense by Payment Mode' : 'Day-wise Expenses';
+  document.getElementById('dv3').className = 'dvbtn' + (v==='trf' ? ' on' : '');
+  // Show sub-view row only when NOT on transfers; hide type toggles selection when on transfers
+  document.getElementById('dashViewRow').style.display = v==='trf' ? 'none' : 'flex';
+  // When going to transfers, un-select expense/income type buttons
+  if (v === 'trf') {
+    document.getElementById('dashTypeExp').className = 'dvbtn';
+    document.getElementById('dashTypeInc').className = 'dvbtn';
+  } else {
+    // Restore type button state
+    document.getElementById('dashTypeExp').className = 'dvbtn' + (dashType==='expense' ? ' on' : '');
+    document.getElementById('dashTypeInc').className = 'dvbtn' + (dashType==='income'  ? ' on' : '');
+  }
+  const typeWord = dashType === 'income' ? 'Income' : 'Expense';
+  const labels = { cat:typeWord+' by Category', pay:typeWord+' by Payment Mode', day:'Day-wise '+typeWord, trf:'Transfers & CC Payments' };
+  document.getElementById('dashSec').textContent = labels[v] || '';
   expandedCards.clear();
   renderDash();
 }
@@ -893,6 +1277,7 @@ function renderDash() {
   buildMonthChips();
   if (dashView === 'pay') renderDashPay();
   else if (dashView === 'day') renderDashDay();
+  else if (dashView === 'trf') renderDashTransfers();
   else renderDashCat();
 }
 
@@ -1085,6 +1470,100 @@ function renderDashPay() {
 }
 
 
+
+// ── TRANSFERS VIEW ──
+function renderDashTransfers() {
+  const txs = getTransferTxs();
+  const el  = document.getElementById('dashGrid');
+
+  if (!txs.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ico">⇄</div>
+      <div class="empty-nm">No transfers yet</div>
+      <div>Use the + button → ⇄ Transfer to record bank or CC payments</div></div>`;
+    return;
+  }
+
+  const totalTrf  = txs.filter(t => t.type==='transfer-out').reduce((a,t)=>a+t.amount,0);
+  const totalCC   = txs.filter(t => t.type==='cc-payment').reduce((a,t)=>a+t.amount,0);
+  const totalAll  = totalTrf + totalCC;
+  const C = 2*Math.PI*26;
+
+  // Summary card
+  let html = `<div class="sum-card">
+    <div class="sum-ring">
+      <svg viewBox="0 0 60 60">
+        <circle fill="none" stroke="var(--s3)" stroke-width="6" cx="30" cy="30" r="26"/>
+        <circle fill="none" stroke="url(#tgr)" stroke-width="6" stroke-linecap="round"
+          cx="30" cy="30" r="26"
+          stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C*0.18).toFixed(1)}"/>
+        <defs><linearGradient id="tgr" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#00d4ff"/><stop offset="100%" stop-color="#ff8c42"/>
+        </linearGradient></defs>
+      </svg>
+      <div class="sum-ring-lbl">${txs.length}<span>txns</span></div>
+    </div>
+    <div class="sum-info">
+      <div class="sum-lbl">Transfers · ${periodLabel()}</div>
+      <div class="sum-amt" style="color:var(--yw)">₹${fmt(totalAll)}</div>
+      <div class="sum-sub">Bank: ₹${fmt(totalTrf)} · CC Pay: ₹${fmt(totalCC)}</div>
+    </div>
+  </div>`;
+
+  // Group by type
+  const groups = [
+    { label:'⇄ Bank Transfers', type:'transfer-out', color:'#00d4ff' },
+    { label:'💳 Credit Card Payments', type:'cc-payment', color:'#ff8c42' },
+  ];
+
+  groups.forEach(g => {
+    const grpTxs = txs.filter(t => t.type === g.type)
+                      .sort((a,b) => new Date(b.date)-new Date(a.date));
+    if (!grpTxs.length) return;
+    const grpTotal = grpTxs.reduce((a,t)=>a+t.amount,0);
+
+    html += `<div class="dcard">
+      <div class="dcard-head" onclick="expandCard('trf_${g.type}')">
+        <div class="dico" style="background:${g.color}22;font-size:20px">${g.label.slice(0,2)}</div>
+        <div class="dinfo">
+          <div class="dnm">${g.label}</div>
+          <div class="dpct-lbl">${grpTxs.length} transaction${grpTxs.length!==1?'s':''}</div>
+        </div>
+        <div class="damt" style="color:${g.color}">₹${fmt(grpTotal)}</div>
+        <div class="dchev${expandedCards.has('trf_'+g.type)?' open':''}" id="chv_trf_${g.type}">▼</div>
+      </div>
+      <div class="dbar-wrap">
+        <div class="dbar-bg"><div class="dbar-fill" style="width:${totalAll>0?Math.round(grpTotal/totalAll*100):0}%;background:${g.color}88"></div></div>
+      </div>
+      <div class="dsubs${expandedCards.has('trf_'+g.type)?' open':''}" id="sub_trf_${g.type}">
+        ${grpTxs.map((t,i) => {
+          const fromPm = S.payments.find(p => p.name===t.paymentMode || p.id===t.paymentMode);
+          // Find matching transfer-in for this tx (same date+amount)
+          const paired = S.transactions.find(x =>
+            x.type==='transfer-in' && x.amount===t.amount &&
+            Math.abs(new Date(x.date)-new Date(t.date)) < 60000);
+          const toPm = paired ? S.payments.find(p=>p.name===paired.paymentMode||p.id===paired.paymentMode) : null;
+          return `<div class="dsub" style="${i<grpTxs.length-1?'border-bottom:1px solid rgba(255,255,255,.04)':''}">
+            <div class="dsub-ico">${fromPm?.icon||'🏦'}</div>
+            <div class="dsub-info">
+              <div class="dsub-nm">
+                ${fromPm?.name||t.paymentMode||'Unknown'}
+                ${toPm?` <span style="color:var(--mt)">→</span> ${toPm.icon||''} ${toPm.name}`:''}
+              </div>
+              <div class="dsub-bar"><div class="dsub-bar-fill" style="width:${grpTotal>0?Math.round(t.amount/grpTotal*100):0}%;background:${g.color}"></div></div>
+              <div style="font-size:10px;color:var(--mt);margin-top:2px">${fmtD(t.date)}${t.notes?' · '+t.notes:''}</div>
+            </div>
+            <div class="dsub-right">
+              <div class="dsub-amt" style="color:${g.color}">₹${fmt(t.amount)}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
 // ── DAY WISE VIEW ──
 function renderDashDay() {
   const txs = getDashTxs();
@@ -1218,8 +1697,11 @@ function toggleSubTxn(subId) {
   renderDash();
 }
 
+function expandCard(kid) { toggleCard(kid); }
+
 function toggleCard(kid) {
-  const subsEl = document.getElementById('subs_' + kid);
+  // support both 'subs_' prefix (category cards) and 'sub_' prefix (transfer cards)
+  const subsEl = document.getElementById('subs_' + kid) || document.getElementById('sub_' + kid);
   const chvEl  = document.getElementById('chv_'  + kid);
   const card   = subsEl?.closest('.dcard');
   if (!subsEl) return;
@@ -1245,17 +1727,25 @@ function switchTab(t) {
   document.getElementById('vDash').style.display  = t==='dash' ? 'block' : 'none';
   document.getElementById('vBud').style.display   = t==='bud'  ? 'block' : 'none';
   document.getElementById('vPty').style.display   = t==='pty'  ? 'block' : 'none';
+  document.getElementById('vAcc').style.display   = t==='acc'  ? 'block' : 'none';
+  document.getElementById('vInv').style.display   = t==='inv'  ? 'block' : 'none';
   document.getElementById('tabTx').className   = 'tab' + (t==='tx'   ? ' on' : '');
   document.getElementById('tabDash').className = 'tab' + (t==='dash' ? ' on' : '');
   document.getElementById('tabBud').className  = 'tab' + (t==='bud'  ? ' on' : '');
   document.getElementById('tabPty').className  = 'tab' + (t==='pty'  ? ' on' : '');
+  document.getElementById('tabAcc').className  = 'tab' + (t==='acc'  ? ' on' : '');
+  document.getElementById('tabInv').className  = 'tab' + (t==='inv'  ? ' on' : '');
   document.getElementById('nvTx').className    = 'nv'  + (t==='tx'   ? ' on' : '');
   document.getElementById('nvDash').className  = 'nv'  + (t==='dash' ? ' on' : '');
   document.getElementById('nvBud').className   = 'nv'  + (t==='bud'  ? ' on' : '');
   document.getElementById('nvPty').className   = 'nv'  + (t==='pty'  ? ' on' : '');
+  document.getElementById('nvAcc').className   = 'nv'  + (t==='acc'  ? ' on' : '');
+  document.getElementById('nvInv').className   = 'nv'  + (t==='inv'  ? ' on' : '');
   document.getElementById('scroll').scrollTop = 0;
   if (t === 'dash') renderDash();
   if (t === 'pty') renderParties();
+  if (t === 'acc') renderAccounts();
+  if (t === 'inv') renderInvestments();
 }
 
 // ══════════════════════════════════════
@@ -1311,10 +1801,14 @@ function renderManage() {
   document.getElementById('mSubMaj').innerHTML = majors.map(m=>`<option value="${esc(m)}">${m}</option>`).join('');
 
   // --- PAYMENTS ---
+  const typeTag2 = {bank:'🏦 Bank',cc:'💳 Card',cash:'💵 Cash',wallet:'📲 Wallet'};
   document.getElementById('payList').innerHTML = S.payments.map(p=>`
     <div class="lrow">
-      <div class="lico">${p.icon||'💳'}</div>
-      <div class="linf"><div class="lnm">${p.name}</div></div>
+      <div class="lico" style="flex-shrink:0">${p.icon||'💳'}</div>
+      <div class="linf">
+        <div class="lnm">${p.name}</div>
+        <div class="lsub">${typeTag2[p.accType||'bank']||''}${p.accType==='cc'&&p.ccDueDay?' · Due '+p.ccDueDay+'th':''}${p.accType!=='cc'&&p.openBal?' · ₹'+fmt(p.openBal):''}</div>
+      </div>
       <div class="lacts">
         <button class="act-btn edit" onclick="openEditPay('${esc(p.id)}')">✏️</button>
         <button class="act-btn del"  onclick="delPay('${esc(p.id)}')">🗑</button>
@@ -1454,39 +1948,65 @@ async function delSub(major,subName) {
 
 // ── PAYMENT MODES ──
 async function addPay() {
-  const name=document.getElementById('mPayNm').value.trim();
-  const icon=document.getElementById('mPayIco').value.trim()||'💳';
-  if (!name) { toast('Enter a payment mode name','err'); return; }
+  const name     = document.getElementById('mPayNm').value.trim();
+  // Read accType from which type-tog button has 'on' class — bulletproof fallback
+  const accType  = (typeof newPayType !== 'undefined') ? newPayType
+    : (['ptBank','ptCC','ptCash','ptWallet'].find(id => document.getElementById(id)?.classList.contains('on'))
+       ?.replace('pt','').toLowerCase() || 'bank');
+  const defIcon  = accType==='bank'?'🏦':accType==='cc'?'💳':accType==='cash'?'💵':'📲';
+  const icon     = document.getElementById('mPayIco').value.trim() || defIcon;
+  const openBal  = parseFloat(document.getElementById('mPayOpenBal')?.value) || 0;
+  const ccLimit  = parseFloat(document.getElementById('mPayLimit')?.value)   || 0;
+  const ccBillDay= parseInt(document.getElementById('mPayBillDay')?.value)   || 1;
+  const ccDueDay = parseInt(document.getElementById('mPayDue')?.value)       || 0;
+  if (!name) { toast('Enter a name','err'); return; }
   try {
-    const r=await API({action:'addPaymentMode',name,icon});
+    const r = await API({ action:'addPaymentMode', name, icon, accType, openBal, ccLimit, ccBillDay, ccDueDay });
     if (!r.ok) throw new Error(r.error||'Failed');
-    S.payments.push({id:r.id,name,icon});
-    document.getElementById('mPayNm').value='';
-    document.getElementById('mPayIco').value='';
+    S.payments.push({ id:r.id, name, icon, accType, openBal, ccLimit, ccBillDay, ccDueDay });
+    document.getElementById('mPayNm').value = '';
+    document.getElementById('mPayIco').value = '';
+    if (document.getElementById('mPayOpenBal')) document.getElementById('mPayOpenBal').value = '';
+    if (document.getElementById('mPayLimit'))   document.getElementById('mPayLimit').value   = '';
+    if (document.getElementById('mPayDue'))     document.getElementById('mPayDue').value     = '';
     renderManage();
-    toast('✅ Payment mode added','ok');
+    toast('✅ Account added','ok');
   } catch(e) { toast('⚠️ '+e.message,'err'); }
 }
 
 function openEditPay(id) {
-  editPayId=id;
-  const p=S.payments.find(x=>x.id===id);
-  document.getElementById('ePayNm').value=p?.name||'';
-  document.getElementById('ePayIco').value=p?.icon||'';
-  const box=document.getElementById('editPayBox');
+  editPayId = id;
+  const p = S.payments.find(x => x.id === id);
+  editPayAccType = p?.accType || 'bank';
+  document.getElementById('ePayNm').value  = p?.name  || '';
+  document.getElementById('ePayIco').value = p?.icon  || '';
+  document.getElementById('ePayBal').value = p?.accType==='cc' ? (p?.ccLimit||'') : (p?.openBal||'');
+  const showDue = p?.accType === 'cc';
+  document.getElementById('ePayDueLbl').style.display = showDue ? 'block' : 'none';
+  document.getElementById('ePayDue').style.display    = showDue ? 'block' : 'none';
+  document.getElementById('ePayBillDay') && (document.getElementById('ePayBillDay').value = p?.ccBillDay || '');
+  document.getElementById('ePayDue').value = p?.ccDueDay || '';
+  const box = document.getElementById('editPayBox');
   box.classList.add('open');
-  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  setTimeout(() => box.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
 }
 function closeEditPay() { document.getElementById('editPayBox').classList.remove('open'); editPayId=''; }
 async function saveEditPay() {
-  const name=document.getElementById('ePayNm').value.trim();
-  const icon=document.getElementById('ePayIco').value.trim()||'💳';
+  const name     = document.getElementById('ePayNm').value.trim();
+  const icon     = document.getElementById('ePayIco').value.trim() || '💳';
+  const balVal   = parseFloat(document.getElementById('ePayBal').value) || 0;
+  const openBal  = editPayAccType !== 'cc' ? balVal : 0;
+  const ccLimit  = editPayAccType === 'cc' ? balVal : 0;
+  const ccBillDay= editPayAccType === 'cc' ? (parseInt(document.getElementById('ePayBillDay')?.value)||1) : 1;
+  const ccDueDay = editPayAccType === 'cc' ? (parseInt(document.getElementById('ePayDue').value)||0)  : 0;
   if (!name) { toast('Enter a name','err'); return; }
   try {
-    const r=await API({action:'editPaymentMode',id:editPayId,name,icon});
+    const r = await API({ action:'editPaymentMode', id:editPayId, name, icon,
+      accType:editPayAccType, openBal, ccLimit, ccBillDay, ccDueDay });
     if (!r.ok) throw new Error(r.error||'Failed');
-    const idx=S.payments.findIndex(p=>p.id===editPayId);
-    if (idx>=0) S.payments[idx]={...S.payments[idx],name,icon};
+    const idx = S.payments.findIndex(p => p.id === editPayId);
+    if (idx >= 0) S.payments[idx] = { ...S.payments[idx], name, icon,
+      accType:editPayAccType, openBal, ccLimit, ccDueDay };
     closeEditPay(); renderManage();
     toast('✅ Updated','ok');
   } catch(e) { toast('⚠️ '+e.message,'err'); }
@@ -1543,18 +2063,34 @@ function openAdd() {
   const now=new Date();
   document.getElementById('addDate').value=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
   setType('expense');
+  setTrfType('bank');
   buildPaySel();
   document.getElementById('addOv').classList.add('open');
   setTimeout(()=>document.getElementById('addAmt').focus(),400);
 }
 
 function setType(t) {
-  txType=t;
-  document.getElementById('tgExp').className='tg'+(t==='expense'?' exp':'');
-  document.getElementById('tgInc').className='tg'+(t==='income'?' inc':'');
-  document.getElementById('subSel').value='';
-  document.getElementById('budWarn').style.display='none';
-  buildSubSel();
+  txType = t;
+  // toggle buttons
+  document.getElementById('tgExp').className      = 'tg' + (t==='expense'  ? ' exp' : '');
+  document.getElementById('tgInc').className      = 'tg' + (t==='income'   ? ' inc' : '');
+  document.getElementById('tgTransfer').className = 'tg' + (t==='transfer' ? ' trf' : '');
+  // show/hide field panels
+  const isTransfer = t === 'transfer';
+  document.getElementById('normalFields').style.display   = isTransfer ? 'none'  : 'block';
+  document.getElementById('transferFields').style.display = isTransfer ? 'block' : 'none';
+  // reset normal fields
+  document.getElementById('subSel').value = '';
+  document.getElementById('budWarn').style.display = 'none';
+  if (isTransfer) {
+    // set default date and populate selects
+    const now = new Date();
+    document.getElementById('trfDate').value =
+      now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+    buildTrfSelects();
+  } else {
+    buildSubSel();
+  }
 }
 
 function buildSubSel() {
@@ -1598,6 +2134,43 @@ function checkBudWarn() {
 }
 
 async function saveTx() {
+  // ── TRANSFER ──
+  if (txType === 'transfer') {
+    const amt    = parseFloat(document.getElementById('trfAmt').value);
+    const fromId = document.getElementById('trfFrom').value;
+    const toId   = document.getElementById('trfTo').value;
+    const dateV  = document.getElementById('trfDate').value;
+    const notes  = document.getElementById('trfNotes').value.trim();
+    if (!amt||amt<=0) { toast('Enter amount','err'); return; }
+    if (!fromId||!toId) { toast('Select both accounts','err'); return; }
+    if (fromId===toId) { toast('From and To cannot be same','err'); return; }
+    const fromNm = S.payments.find(p=>p.id===fromId)?.name||'';
+    const toNm   = S.payments.find(p=>p.id===toId)?.name||'';
+    const dateStr= dateV?new Date(dateV+'T12:00:00').toISOString():new Date().toISOString();
+    const txT    = trfType==='cc' ? 'cc-payment' : 'transfer-out';
+    const btn    = document.getElementById('saveTxBtn');
+    btn.textContent='Saving…'; btn.disabled=true;
+    try {
+      const r1 = await API({ action:'addTransaction', date:dateStr, type:txT,
+        majorCategory:'Transfer', subCategory:trfType==='cc'?'CC Payment':'Bank Transfer',
+        paymentMode:fromNm, amount:amt, notes:notes||'To: '+toNm });
+      if (!r1.ok) throw new Error(r1.error||'Failed');
+      const r2 = await API({ action:'addTransaction', date:dateStr, type:'transfer-in',
+        majorCategory:'Transfer', subCategory:trfType==='cc'?'CC Payment':'Bank Transfer',
+        paymentMode:toNm, amount:amt, notes:notes||'From: '+fromNm });
+      S.transactions.unshift({ id:r1.id, date:dateStr, type:txT, majorCategory:'Transfer',
+        subCategory:trfType==='cc'?'CC Payment':'Bank Transfer', paymentMode:fromNm, amount:amt, notes:notes||'To: '+toNm });
+      if (r2.id) S.transactions.unshift({ id:r2.id, date:dateStr, type:'transfer-in',
+        majorCategory:'Transfer', subCategory:trfType==='cc'?'CC Payment':'Bank Transfer',
+        paymentMode:toNm, amount:amt, notes:notes||'From: '+fromNm });
+      renderAll();
+      document.getElementById('addOv').classList.remove('open');
+      toast('✅ ₹'+fmt(amt)+' transferred: '+fromNm+' → '+toNm,'ok');
+    } catch(e) { toast('⚠️ '+e.message,'err'); }
+    finally { btn.textContent='Add Transaction'; btn.disabled=false; }
+    return;
+  }
+  // ── NORMAL expense / income ──
   const amt=parseFloat(document.getElementById('addAmt').value);
   if (!amt||amt<=0) { document.getElementById('addAmt').focus(); return; }
   const subVal=document.getElementById('subSel').value;
@@ -1610,7 +2183,6 @@ async function saveTx() {
   const btn=document.getElementById('saveTxBtn');
   btn.textContent='Saving…'; btn.disabled=true;
   try {
-    // Send each field as individual GET param — no JSON stringify needed
     const r=await API({
       action:'addTransaction',
       date:dateISO, type:txType,
@@ -1619,21 +2191,23 @@ async function saveTx() {
       notes:document.getElementById('addNotes').value.trim()
     });
     if (!r.ok) throw new Error(r.error||'Save failed');
-    const tx={id:r.id,date:dateISO,type:txType,majorCategory:majorCat,subCategory:subCat,paymentMode:payNm,amount:amt,notes:document.getElementById('addNotes').value.trim()};
+    const tx={id:r.id,date:dateISO,type:txType,majorCategory:majorCat,subCategory:subCat,
+      paymentMode:payNm,amount:amt,notes:document.getElementById('addNotes').value.trim()};
     S.transactions.unshift(tx); renderAll();
     document.getElementById('addOv').classList.remove('open');
-    if (txType==='expense') {
+    if(txType==='expense'){
       const bud=S.budgets[majorCat]||0;
-      if (bud>0) {
-        const spent=S.transactions.filter(t=>t.type==='expense'&&t.majorCategory===majorCat&&inMonth(t.date)).reduce((a,t)=>a+t.amount,0);
-        if (spent>bud) toast(`🚨 Over budget in ${majorCat}!`,'err');
-        else if (spent/bud>=0.8) toast(`⚠️ 80%+ budget used in ${majorCat}`,'warn');
+      if(bud>0){
+        const sp=S.transactions.filter(t=>t.type==='expense'&&t.majorCategory===majorCat&&inMonth(t.date)).reduce((a,t)=>a+t.amount,0);
+        if(sp>bud) toast('🚨 Over budget in '+majorCat+'!','err');
+        else if((sp/bud)>=0.8) toast('⚠️ 80%+ budget used in '+majorCat,'warn');
         else toast('✅ Saved','ok');
       } else toast('✅ Saved','ok');
     } else toast('✅ Saved','ok');
   } catch(e) { toast('⚠️ '+e.message,'err'); }
   finally { btn.textContent='Add Transaction'; btn.disabled=false; }
 }
+
 
 async function delTx(id) {
   if (!confirm('Delete this transaction?')) return;
@@ -1648,6 +2222,738 @@ async function delTx(id) {
 // ══════════════════════════════════════
 //  OVERLAYS
 // ══════════════════════════════════════
+
+
+// ═══════════════════════ ACCOUNTS ═══════════════════════
+// Payment modes now have extra fields:
+// { id, name, icon, accType:'bank'|'cc'|'cash'|'wallet', openBal, ccLimit, ccDueDay }
+
+function setPayType(t) {
+  newPayType = t;
+  ['bank','cc','cash','wallet'].forEach(k => {
+    document.getElementById('pt'+{bank:'Bank',cc:'CC',cash:'Cash',wallet:'Wallet'}[k])
+      .className = 'type-tog' + (k===t?' on':'');
+  });
+  document.getElementById('payExtraBank').style.display = t==='bank' ? 'block' : 'none';
+  document.getElementById('payExtraCC').style.display   = t==='cc'   ? 'block' : 'none';
+}
+
+function setTrfType(t) {
+  trfType = t;
+  document.getElementById('trfBank').className = 'type-tog' + (t==='bank' ? ' on' : '');
+  document.getElementById('trfCC').className   = 'type-tog' + (t==='cc'   ? ' on' : '');
+  buildTrfSelects();
+}
+
+function buildTrfSelects() {
+  const all    = S.payments;
+  const banks  = all.filter(p => (p.accType||'bank') === 'bank');
+  const cards  = all.filter(p => p.accType === 'cc');
+  const liquid = all.filter(p => ['bank','cash','wallet'].includes(p.accType||'bank'));
+
+  const makeOpts = (list, placeholder) =>
+    `<option value="">${list.length ? placeholder : '— No accounts yet —'}</option>` +
+    list.map(p => `<option value="${esc(p.id)}">${p.icon||'🏦'} ${p.name}</option>`).join('');
+
+  // From always bank/liquid accounts
+  document.getElementById('trfFrom').innerHTML = makeOpts(liquid, '— From Account —');
+
+  if (trfType === 'cc') {
+    document.getElementById('trfTo').innerHTML = makeOpts(cards, '— To Credit Card —');
+  } else {
+    // Bank→Bank: show all liquid accounts
+    document.getElementById('trfTo').innerHTML = makeOpts(liquid, '— To Account —');
+  }
+}
+
+// ── Accounts view ──
+function safeId(s){ return String(s).replace(/[^a-zA-Z0-9]/g,'_'); }
+
+function toggleAccDetail(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function renderAccounts() {
+  const el = document.getElementById('accList');
+  if (!S.payments.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ico">🏦</div>
+      <div class="empty-nm">No accounts yet</div>
+      <div>Go to ⚙️ Manage → Payments to add accounts</div></div>`;
+    return;
+  }
+
+  // ── Compute running balance for non-CC accounts ──
+  function accBalance(pm) {
+    let bal = parseFloat(pm.openBal) || 0;
+    S.transactions.forEach(t => {
+      if (t.paymentMode !== pm.name && t.paymentMode !== pm.id) return;
+      if (t.type === 'income')        bal += t.amount;
+      if (t.type === 'expense')       bal -= t.amount;
+      if (t.type === 'transfer-out')  bal -= t.amount;
+      if (t.type === 'transfer-in')   bal += t.amount;
+      if (t.type === 'cc-payment')    bal -= t.amount;
+    });
+    return bal;
+  }
+
+  // ── CC billing cycle helpers ──
+  // Given billDay (e.g. 1), find the current billing cycle's start & end
+  function getCurrentCycle(billDay) {
+    const now   = new Date();
+    const today = now.getDate();
+    let cycleStart, cycleEnd;
+    if (today >= billDay) {
+      // we're inside the current cycle that started this month
+      cycleStart = new Date(now.getFullYear(), now.getMonth(), billDay);
+      cycleEnd   = new Date(now.getFullYear(), now.getMonth()+1, billDay-1);
+    } else {
+      // we're before billDay, so current cycle started last month
+      cycleStart = new Date(now.getFullYear(), now.getMonth()-1, billDay);
+      cycleEnd   = new Date(now.getFullYear(), now.getMonth(), billDay-1);
+    }
+    cycleEnd.setHours(23, 59, 59);
+    return { cycleStart, cycleEnd };
+  }
+
+  // Previous billing cycle (last bill that was/will be generated)
+  function getPrevCycle(billDay) {
+    const { cycleStart } = getCurrentCycle(billDay);
+    const prevEnd   = new Date(cycleStart); prevEnd.setDate(prevEnd.getDate()-1); prevEnd.setHours(23,59,59);
+    const prevStart = new Date(prevEnd.getFullYear(), prevEnd.getMonth(), billDay);
+    if (prevStart > prevEnd) prevStart.setMonth(prevStart.getMonth()-1);
+    return { prevStart, prevEnd };
+  }
+
+  // Transactions on a CC in a given date range
+  function ccTxsInRange(pm, from, to) {
+    return S.transactions.filter(t => {
+      if (t.type !== 'expense') return false;
+      if (t.paymentMode !== pm.name && t.paymentMode !== pm.id) return false;
+      const d = new Date(t.date);
+      return d >= from && d <= to;
+    });
+  }
+
+  // CC payments received in a range
+  function ccPaymentsInRange(pm, from, to) {
+    return S.transactions.filter(t => {
+      if (t.type !== 'cc-payment' && t.type !== 'transfer-in') return false;
+      if (t.paymentMode !== pm.name && t.paymentMode !== pm.id) return false;
+      const d = new Date(t.date);
+      return d >= from && d <= to;
+    }).reduce((a,t) => a+t.amount, 0);
+  }
+
+  const now = new Date();
+
+  // Totals for summary card
+  const liquid    = S.payments.filter(p => ['bank','cash','wallet'].includes(p.accType||'bank'));
+  const ccCards   = S.payments.filter(p => p.accType === 'cc');
+  const totalLiq  = liquid.reduce((a,p) => a + accBalance(p), 0);
+
+  // CC outstanding = sum of current cycle expenses minus payments made this cycle
+  const totalCCDue = ccCards.reduce((a, pm) => {
+    const billDay = parseInt(pm.ccBillDay) || 1;
+    const { cycleStart, cycleEnd } = getCurrentCycle(billDay);
+    const spent = ccTxsInRange(pm, cycleStart, cycleEnd).reduce((s,t)=>s+t.amount,0);
+    return a + spent;
+  }, 0);
+  const totalLimit = ccCards.reduce((a,p) => a+(parseFloat(p.ccLimit)||0), 0);
+
+  // ── Summary card ──
+  let html = `<div class="acc-total-card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--mt)">Net Worth Snapshot</div>
+    <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;margin:6px 0;letter-spacing:-1px;color:${totalLiq-totalCCDue>=0?'var(--gn)':'var(--ac2)'}">
+      ₹${fmt(totalLiq - totalCCDue)}
+    </div>
+    <div class="acc-total-row">
+      <div class="acc-total-cell"><div class="acc-total-cell-lbl">Liquid</div><div class="acc-total-cell-val cg">₹${fmt(totalLiq)}</div></div>
+      <div class="acc-total-cell"><div class="acc-total-cell-lbl">CC Due</div><div class="acc-total-cell-val cr">₹${fmt(totalCCDue)}</div></div>
+      <div class="acc-total-cell"><div class="acc-total-cell-lbl">CC Limit</div><div class="acc-total-cell-val cy">₹${fmt(totalLimit)}</div></div>
+    </div>
+  </div>`;
+
+  const typeGrad  = { bank:'linear-gradient(135deg,#1a237e,#0d47a1)', cc:'linear-gradient(135deg,#4a0e0e,#b71c1c)', cash:'linear-gradient(135deg,#1b5e20,#2e7d32)', wallet:'linear-gradient(135deg,#4a148c,#7b1fa2)' };
+  const typeLabel = { bank:'Bank Account', cc:'Credit Card', cash:'Cash', wallet:'Wallet / UPI' };
+
+  // ── Non-CC accounts ──
+  ['bank','cash','wallet'].forEach(at => {
+    S.payments.filter(p => (p.accType||'bank') === at).forEach(pm => {
+      const bal = accBalance(pm);
+      const monthExp = S.transactions.filter(t =>
+        (t.paymentMode===pm.name||t.paymentMode===pm.id) && t.type==='expense' && inMonth(t.date)
+      ).reduce((a,t)=>a+t.amount,0);
+      const monthInc = S.transactions.filter(t =>
+        (t.paymentMode===pm.name||t.paymentMode===pm.id) && t.type==='income' && inMonth(t.date)
+      ).reduce((a,t)=>a+t.amount,0);
+      html += `<div class="acc-card" style="background:${typeGrad[at]}">
+        <div class="acc-top">
+          <div class="acc-ico">${pm.icon||'🏦'}</div>
+          <div class="acc-info">
+            <div class="acc-nm">${pm.name}</div>
+            <div class="acc-type">${typeLabel[at]}</div>
+          </div>
+        </div>
+        <div class="acc-bal-lbl">Current Balance</div>
+        <div class="acc-bal" style="color:${bal>=0?'#a5d6a7':'#ff8a80'}">₹${fmt(bal)}</div>
+        <div class="acc-row">
+          <div class="acc-stat"><div class="acc-stat-lbl">Opening Bal</div><div class="acc-stat-val">₹${fmt(pm.openBal||0)}</div></div>
+          <div class="acc-stat"><div class="acc-stat-lbl">This Month</div>
+            <div style="display:flex;gap:6px;align-items:center;margin-top:2px">
+              <span style="font-size:11px;color:#a5d6a7">+₹${fmt(monthInc)}</span>
+              <span style="font-size:11px;color:#ff8a80">-₹${fmt(monthExp)}</span>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    });
+  });
+
+  // ── Credit Cards ──
+  ccCards.forEach(pm => {
+    const limit    = parseFloat(pm.ccLimit)   || 0;
+    const billDay  = parseInt(pm.ccBillDay)   || 1;
+    const dueDay   = parseInt(pm.ccDueDay)    || 0;
+
+    // Current cycle
+    const { cycleStart, cycleEnd } = getCurrentCycle(billDay);
+    const curTxs   = ccTxsInRange(pm, cycleStart, cycleEnd);
+    const curSpent = curTxs.reduce((a,t) => a+t.amount, 0);
+    const avail    = limit > 0 ? limit - curSpent : null;
+    const usePct   = limit > 0 ? Math.min((curSpent/limit)*100, 100) : 0;
+
+    // Previous cycle (last bill)
+    const { prevStart, prevEnd } = getPrevCycle(billDay);
+    const prevTxs    = ccTxsInRange(pm, prevStart, prevEnd);
+    const prevSpent  = prevTxs.reduce((a,t) => a+t.amount, 0);
+    const prevPaid   = ccPaymentsInRange(pm, prevEnd, now);
+    const prevBalance= prevSpent - prevPaid;
+
+    // Due date calculation
+    let dueStr = '', dueClass = '', daysLeft = null;
+    if (dueDay) {
+      // Due date is dueDay of the month AFTER the bill cycle ends
+      const cycleEndMonth = cycleEnd.getMonth();
+      const cycleEndYear  = cycleEnd.getFullYear();
+      let dueDate = new Date(cycleEndYear, cycleEndMonth+1, dueDay);
+      daysLeft = Math.ceil((dueDate - now) / (1000*60*60*24));
+      if (daysLeft < 0) { dueDate.setMonth(dueDate.getMonth()+1); daysLeft = Math.ceil((dueDate-now)/(1000*60*60*24)); }
+      dueStr   = dueDate.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+      dueClass = daysLeft <= 5 ? '' : daysLeft <= 10 ? 'warn' : 'ok';
+    }
+
+    // Format cycle dates
+    const fmtDate = d => d.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+    const cycleStr = `${fmtDate(cycleStart)} – ${fmtDate(cycleEnd)}`;
+
+    // Per-transaction breakdown for current cycle
+    const txRows = curTxs.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(t =>
+      `<div style="display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid rgba(255,255,255,.05)">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.subCategory||t.majorCategory}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:1px">${fmtD(t.date)}${t.notes?' · '+t.notes:''}</div>
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#ff8a80;flex-shrink:0">₹${fmt(t.amount)}</div>
+      </div>`
+    ).join('');
+
+    const cardId = 'cc_'+pm.id;
+    const isOpen = typeof window !== 'undefined' && document.getElementById(cardId+'_txns')?.classList.contains('open') || false;
+
+    html += `<div class="acc-card" style="background:${typeGrad.cc};padding:0;overflow:hidden">
+      <div style="padding:16px 18px">
+        <div class="acc-top">
+          <div class="acc-ico">${pm.icon||'💳'}</div>
+          <div class="acc-info">
+            <div class="acc-nm">${pm.name}</div>
+            <div class="acc-type">Credit Card${limit?' · Limit ₹'+fmt(limit):''}</div>
+          </div>
+        </div>
+
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.5);margin-bottom:3px">
+          Current Cycle Outstanding
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#ff8a80">₹${fmt(curSpent)}</div>
+        ${limit>0?`<div class="acc-cc-bar" style="margin:8px 0"><div class="acc-cc-fill" style="width:${usePct}%"></div></div>`:''}
+
+        <div class="acc-row">
+          <div class="acc-stat">
+            <div class="acc-stat-lbl">Billing Cycle</div>
+            <div style="font-size:11px;font-weight:600;margin-top:2px">${cycleStr}</div>
+          </div>
+          ${avail!==null?`<div class="acc-stat">
+            <div class="acc-stat-lbl">Available Credit</div>
+            <div class="acc-stat-val" style="color:#a5d6a7">₹${fmt(avail)}</div>
+          </div>`:''}
+        </div>
+
+        ${dueStr?`<div class="acc-due ${dueClass}" style="margin-top:8px">
+          📅 Due ${dueStr}${daysLeft!==null?' · <b>'+daysLeft+' days left</b>':''}
+          ${daysLeft!==null&&daysLeft<=5?' 🚨':''}
+        </div>`:''}
+
+        ${prevSpent>0?`<div style="background:rgba(0,0,0,.25);border-radius:10px;padding:10px 12px;margin-top:10px">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);margin-bottom:6px">
+            Last Bill (${fmtDate(prevStart)} – ${fmtDate(prevEnd)})
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,.6)">Total: <b style="color:#ff8a80">₹${fmt(prevSpent)}</b></div>
+              <div style="font-size:11px;color:rgba(255,255,255,.6)">Paid: <b style="color:#a5d6a7">₹${fmt(prevPaid)}</b></div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:${prevBalance<=0?'#a5d6a7':'#ff8a80'}">
+                ${prevBalance<=0?'✅ Cleared':'₹'+fmt(prevBalance)+' due'}
+              </div>
+            </div>
+          </div>
+        </div>`:''}
+
+        <button onclick="toggleCCTxns('${pm.id}')"
+          style="width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:9px;margin-top:10px;font-size:12px;color:rgba(255,255,255,.8);cursor:pointer;font-family:'Syne',sans-serif;font-weight:600">
+          ${curTxs.length} transaction${curTxs.length!==1?'s':''} this cycle ▼
+        </button>
+      </div>
+
+      <div id="${cardId}_txns" style="display:none;border-top:1px solid rgba(255,255,255,.1)">
+        ${txRows||'<div style="padding:12px 14px;font-size:12px;color:rgba(255,255,255,.4)">No transactions this cycle</div>'}
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function toggleCCTxns(pmId) {
+  const el = document.getElementById('cc_'+pmId+'_txns');
+  if (!el) return;
+  const btn = el.previousElementSibling?.querySelector('button[onclick]');
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    el.style.animation = 'fup .2s ease';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+
+
+// ═══════════════════════ INVESTMENTS ═══════════════════════
+// S.investments = [{ id, name, type, person, bankId, maturity, rate, notes, currentValue,
+//                    entries:[{id,entryType,amount,units,nav,date,note}] }]
+
+let curInvId = null;
+let newInvType = 'MF';
+let invEntryType = 'buy';
+let invPersonFilter = 'all';
+
+const INV_ICONS = { MF:'📈', Equity:'📊', FD:'🏦', PPF:'📗', Other:'💼' };
+const INV_COLORS = { MF:'#6c63ff', Equity:'#ff5f7e', FD:'#ffbe3d', PPF:'#3ddc84', Other:'#94a3b8' };
+
+function setInvType(t) {
+  newInvType = t;
+  ['MF','Equity','FD','PPF','Other'].forEach(k => {
+    document.getElementById('invType'+{MF:'MF',Equity:'EQ',FD:'FD',PPF:'PPF',Other:'Other'}[k])
+      .className = 'type-tog' + (k===t?' on':'');
+  });
+  document.getElementById('invFDFields').style.display = (t==='FD') ? 'block' : 'none';
+}
+
+function setInvEntry(t) {
+  invEntryType = t;
+  document.getElementById('invEntryBuy').className  = 'type-tog' + (t==='buy'  ? ' on' : '');
+  document.getElementById('invEntrySell').className = 'type-tog' + (t==='sell' ? ' on' : '');
+}
+
+// ── Person select toggle ──
+document.getElementById('invPerson')?.addEventListener('change', function() {
+  document.getElementById('invPersonCustom').style.display = this.value==='Other'?'block':'none';
+});
+
+// ── Render portfolio ──
+function renderInvestments() {
+  // Build person filter chips
+  const persons = [...new Set((S.investments||[]).map(i=>i.person||'Self'))];
+  const pc = document.getElementById('invPersonChips');
+  pc.innerHTML = `<div class="chip${invPersonFilter==='all'?' on':''}" onclick="setInvPersonFilter('all')">All</div>`
+    + persons.map(p => `<div class="chip${invPersonFilter===p?' on':''}" onclick="setInvPersonFilter('${esc(p)}')">${p}</div>`).join('');
+
+  const el = document.getElementById('invPortfolio');
+  if (!S.investments?.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ico">📈</div>
+      <div class="empty-nm">No investments yet</div>
+      <div>Tap "+ Add" to track your first investment</div></div>`;
+    return;
+  }
+
+  const filtered = invPersonFilter==='all' ? S.investments : S.investments.filter(i=>(i.person||'Self')===invPersonFilter);
+
+  // Totals
+  const totalInv    = filtered.reduce((a,i) => a + totalInvested(i), 0);
+  const totalCurr   = filtered.reduce((a,i) => a + (parseFloat(i.currentValue)||totalInvested(i)), 0);
+  const totalPL     = totalCurr - totalInv;
+  const plPct       = totalInv>0 ? ((totalPL/totalInv)*100).toFixed(1) : 0;
+  const plCol       = totalPL>0?'var(--gn)':totalPL<0?'var(--rd)':'var(--mt)';
+
+  let html = `<div class="inv-summary">
+    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--mt);margin-bottom:4px">Portfolio${invPersonFilter!=='all'?' · '+invPersonFilter:''}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
+      <div><div style="font-size:9px;color:var(--mt);margin-bottom:2px">Invested</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:16px">₹${fmt(totalInv)}</div></div>
+      <div><div style="font-size:9px;color:var(--mt);margin-bottom:2px">Current</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:16px">₹${fmt(totalCurr)}</div></div>
+      <div><div style="font-size:9px;color:var(--mt);margin-bottom:2px">P&L</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:${plCol}">${totalPL>=0?'+':''}₹${fmt(totalPL)}<span style="font-size:10px;font-weight:500"> (${plPct}%)</span></div>
+      </div>
+    </div>
+  </div>`;
+
+  // Group by person
+  const byPerson = {};
+  filtered.forEach(i => { const p=i.person||'Self'; if(!byPerson[p]) byPerson[p]=[]; byPerson[p].push(i); });
+
+  Object.entries(byPerson).forEach(([person, invs]) => {
+    if(invPersonFilter==='all') html += `<div class="inv-person-hd">👤 ${person}</div>`;
+    invs.sort((a,b)=>totalInvested(b)-totalInvested(a)).forEach(inv => {
+      const invested = totalInvested(inv);
+      const curVal   = parseFloat(inv.currentValue) || invested;
+      const pl       = curVal - invested;
+      const plPct2   = invested>0 ? ((pl/invested)*100).toFixed(1) : 0;
+      const plCls    = pl>0?'pos':pl<0?'neg':'neu';
+      const plSign   = pl>=0?'+':'';
+      const bank     = S.payments.find(p=>p.id===inv.bankId);
+      const color    = INV_COLORS[inv.type]||'#94a3b8';
+      // FD maturity warning
+      let matWarn = '';
+      if(inv.type==='FD' && inv.maturity) {
+        const daysLeft = Math.ceil((new Date(inv.maturity)-new Date())/(1000*60*60*24));
+        if(daysLeft<=30 && daysLeft>=0) matWarn=`<div style="font-size:10px;color:var(--yw);margin-top:3px">⚠️ Matures in ${daysLeft}d</div>`;
+        else if(daysLeft<0) matWarn=`<div style="font-size:10px;color:var(--rd);margin-top:3px">🚨 Matured ${-daysLeft}d ago</div>`;
+      }
+      html += `<div class="inv-card" onclick="openInvDetail('${esc(inv.id)}')">
+        <div class="inv-head">
+          <div class="inv-ico" style="background:${color}22">${INV_ICONS[inv.type]||'💼'}</div>
+          <div class="inv-info">
+            <div class="inv-nm">${inv.name}</div>
+            <div class="inv-meta">${inv.type}${bank?' · '+bank.icon+' '+bank.name:''} · ${inv.entries?.length||0} entries</div>
+            ${matWarn}
+          </div>
+          <div class="inv-right">
+            <div class="inv-val" style="color:${color}">₹${fmt(curVal)}</div>
+            <div class="inv-pl ${plCls}">${plSign}${plPct2}% (${plSign}₹${fmt(Math.abs(pl))})</div>
+          </div>
+        </div>
+      </div>`;
+    });
+  });
+
+  el.innerHTML = html;
+}
+
+function setInvPersonFilter(p) {
+  invPersonFilter = p;
+  renderInvestments();
+}
+
+function totalInvested(inv) {
+  return (inv.entries||[]).reduce((a,e) => a + (e.entryType==='buy' ? e.amount : -e.amount), 0);
+}
+
+// ── Add Investment ──
+function openAddInvestment() {
+  setInvType('MF');
+  document.getElementById('invName').value = '';
+  document.getElementById('invNotes').value = '';
+  document.getElementById('invMaturity').value = '';
+  document.getElementById('invRate').value = '';
+  document.getElementById('invPersonCustom').style.display = 'none';
+  document.getElementById('invPerson').value = 'Self';
+  // populate bank select
+  const banks = S.payments.filter(p=>['bank','cash','wallet'].includes(p.accType||'bank'));
+  document.getElementById('invBank').innerHTML = '<option value="">— None —</option>'
+    + banks.map(p=>`<option value="${esc(p.id)}">${p.icon||'🏦'} ${p.name}</option>`).join('');
+  document.getElementById('addInvOv').classList.add('open');
+}
+
+async function saveInvestment() {
+  const name    = document.getElementById('invName').value.trim();
+  const person  = document.getElementById('invPerson').value;
+  const custom  = document.getElementById('invPersonCustom').value.trim();
+  const bankId  = document.getElementById('invBank').value;
+  const maturity= document.getElementById('invMaturity').value;
+  const rate    = document.getElementById('invRate').value;
+  const notes   = document.getElementById('invNotes').value.trim();
+  if (!name) { toast('Enter investment name','err'); return; }
+  const personName = person==='Other' ? (custom||'Other') : person;
+  try {
+    const r = await API({ action:'addInvestment', name, type:newInvType, person:personName, bankId, maturity, rate, notes });
+    if (!r.ok) throw new Error(r.error||'Failed');
+    if (!S.investments) S.investments = [];
+    S.investments.push({ id:r.id, name, type:newInvType, person:personName, bankId, maturity, rate, notes, currentValue:'', entries:[] });
+    document.getElementById('addInvOv').classList.remove('open');
+    renderInvestments();
+    toast('✅ Investment created','ok');
+  } catch(e) {
+    if (e.message.includes('appendRow') || e.message.includes('null')) {
+      toast('⚠️ Please redeploy Code.gs as a new version first','err');
+    } else {
+      toast('⚠️ '+e.message,'err');
+    }
+  }
+}
+
+// ── Investment Detail ──
+function openInvDetail(id) {
+  curInvId = id;
+  setInvEntry('buy');
+  const inv = S.investments.find(i=>i.id===id);
+  if (!inv) return;
+  const color = INV_COLORS[inv.type]||'#94a3b8';
+  document.getElementById('invDetailIco').textContent = INV_ICONS[inv.type]||'💼';
+  document.getElementById('invDetailIco').style.background = color+'22';
+  document.getElementById('invDetailNm').textContent  = inv.name;
+  document.getElementById('invDetailMeta').textContent = inv.type + ' · ' + (inv.person||'Self');
+  document.getElementById('invCurVal').value = inv.currentValue || '';
+  // Show units fields for MF/Equity
+  document.getElementById('invEntryUnitFields').style.display = ['MF','Equity'].includes(inv.type)?'block':'none';
+  // default date
+  const now = new Date();
+  document.getElementById('invEntryDate').value = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  document.getElementById('invEntryAmt').value  = '';
+  document.getElementById('invEntryNote').value = '';
+  renderInvEntries();
+  document.getElementById('invDetailOv').classList.add('open');
+}
+
+function renderInvEntries() {
+  const inv = S.investments.find(i=>i.id===curInvId);
+  if (!inv) return;
+  const sorted = [...(inv.entries||[])].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const totalBuy  = inv.entries.filter(e=>e.entryType==='buy').reduce((a,e)=>a+e.amount,0);
+  const totalSell = inv.entries.filter(e=>e.entryType==='sell').reduce((a,e)=>a+e.amount,0);
+  const net = totalBuy - totalSell;
+  const curVal = parseFloat(inv.currentValue)||net;
+  const pl = curVal - net;
+  const plCol = pl>0?'var(--gn)':pl<0?'var(--rd)':'var(--mt)';
+
+  const el = document.getElementById('invEntryList');
+  el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+    <div style="background:var(--s2);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:9px;color:var(--mt);margin-bottom:3px">Invested</div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800">₹${fmt(net)}</div>
+    </div>
+    <div style="background:var(--s2);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:9px;color:var(--mt);margin-bottom:3px">Current</div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800">₹${fmt(curVal)}</div>
+    </div>
+    <div style="background:var(--s2);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:9px;color:var(--mt);margin-bottom:3px">P&L</div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:${plCol}">${pl>=0?'+':''}₹${fmt(pl)}</div>
+    </div>
+  </div>`
+  + (sorted.length ? '<div style="background:var(--s1);border:1px solid var(--b);border-radius:14px;overflow:hidden">'
+    + sorted.map((e,i)=>{
+        const isBuy = e.entryType==='buy';
+        return `<div class="ptx" style="${i<sorted.length-1?'border-bottom:1px solid rgba(255,255,255,.04)':''}">
+          <div class="ptx-dot" style="background:${isBuy?'var(--gn)':'var(--rd)'}"></div>
+          <div class="ptx-info">
+            <div class="ptx-nm">${isBuy?'↓ Buy/Deposit':'↑ Sell/Withdraw'}${e.note?' · '+e.note:''}</div>
+            <div class="ptx-dt">${fmtD(e.date)}${e.units?' · '+e.units+' units @ ₹'+e.nav:''}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:${isBuy?'var(--ac2)':'var(--gn)'}">${isBuy?'-':'+'}₹${fmt(e.amount)}</div>
+            <button onclick="deleteInvEntry('${esc(e.id)}')" style="background:none;border:none;color:var(--mt);font-size:10px;cursor:pointer">🗑</button>
+          </div>
+        </div>`;
+      }).join('')
+    + '</div>'
+    : '<div style="color:var(--mt);font-size:13px;padding:8px 0">No entries yet</div>');
+}
+
+async function addInvEntry() {
+  const amt   = parseFloat(document.getElementById('invEntryAmt').value);
+  const date  = document.getElementById('invEntryDate').value;
+  const note  = document.getElementById('invEntryNote').value.trim();
+  const units = parseFloat(document.getElementById('invEntryUnits')?.value)||0;
+  const nav   = parseFloat(document.getElementById('invEntryNav')?.value)||0;
+  if (!amt||amt<=0) { toast('Enter amount','err'); return; }
+
+  const inv     = S.investments.find(i=>i.id===curInvId);
+  const bankPm  = inv?.bankId ? S.payments.find(p=>p.id===inv.bankId) : null;
+  const dateISO = date ? new Date(date+'T12:00:00').toISOString() : new Date().toISOString();
+  const txLabel = inv?.name || 'Investment';
+
+  try {
+    // 1. Save investment entry
+    const r = await API({ action:'addInvEntry', invId:curInvId, entryType:invEntryType,
+      amount:amt, units, nav, date, note });
+    if (!r.ok) throw new Error(r.error||'Failed');
+    inv.entries.push({ id:r.id, entryType:invEntryType, amount:amt, units, nav, date, note });
+
+    // 2. If linked bank exists, create a bank transaction to reflect the movement
+    if (bankPm) {
+      if (invEntryType === 'buy') {
+        // Debit bank — investment purchase
+        const r2 = await API({ action:'addTransaction', date:dateISO, type:'transfer-out',
+          majorCategory:'Investment', subCategory:txLabel,
+          paymentMode:bankPm.name, amount:amt,
+          notes:(note||'Invested in '+txLabel) });
+        if (r2.ok) S.transactions.unshift({ id:r2.id, date:dateISO, type:'transfer-out',
+          majorCategory:'Investment', subCategory:txLabel,
+          paymentMode:bankPm.name, amount:amt, notes:note||'Invested in '+txLabel });
+      } else {
+        // Credit bank — redemption/withdrawal received
+        const r2 = await API({ action:'addTransaction', date:dateISO, type:'transfer-in',
+          majorCategory:'Investment', subCategory:txLabel,
+          paymentMode:bankPm.name, amount:amt,
+          notes:(note||'Redeemed from '+txLabel) });
+        if (r2.ok) S.transactions.unshift({ id:r2.id, date:dateISO, type:'transfer-in',
+          majorCategory:'Investment', subCategory:txLabel,
+          paymentMode:bankPm.name, amount:amt, notes:note||'Redeemed from '+txLabel });
+      }
+    }
+
+    document.getElementById('invEntryAmt').value='';
+    document.getElementById('invEntryNote').value='';
+    renderInvEntries();
+    renderInvestments();
+    renderBal();  // refresh balance card
+    if (curTab==='acc') renderAccounts(); // refresh bank balance if on accounts tab
+
+    const bankMsg = bankPm ? ` · ₹${fmt(amt)} ${invEntryType==='buy'?'debited from':'credited to'} ${bankPm.name}` : '';
+    toast((invEntryType==='buy'?'✅ Invested':'✅ Redeemed') + bankMsg, 'ok');
+  } catch(e) { toast('⚠️ '+e.message,'err'); }
+}
+
+async function saveInvCurrentValue() {
+  const val = document.getElementById('invCurVal').value;
+  try {
+    const r = await API({ action:'updateInvValue', invId:curInvId, currentValue:val });
+    if (!r.ok) throw new Error(r.error||'Failed');
+    const inv = S.investments.find(i=>i.id===curInvId);
+    inv.currentValue = val;
+    renderInvEntries();
+    renderInvestments();
+    toast('✅ Current value updated','ok');
+  } catch(e) { toast('⚠️ '+e.message,'err'); }
+}
+
+async function deleteInvEntry(entryId) {
+  if (!confirm('Delete this entry?')) return;
+  try {
+    const r = await API({ action:'deleteInvEntry', entryId });
+    if (!r.ok) throw new Error(r.error||'Failed');
+    const inv = S.investments.find(i=>i.id===curInvId);
+    inv.entries = inv.entries.filter(e=>e.id!==entryId);
+    renderInvEntries(); renderInvestments();
+    toast('🗑 Deleted','info');
+  } catch(e) { toast('⚠️ '+e.message,'err'); }
+}
+
+async function deleteInvestment() {
+  const inv = S.investments.find(i=>i.id===curInvId);
+  if (!confirm(`Delete investment "${inv?.name}"?`)) return;
+  try {
+    const r = await API({ action:'deleteInvestment', invId:curInvId });
+    if (!r.ok) throw new Error(r.error||'Failed');
+    S.investments = S.investments.filter(i=>i.id!==curInvId);
+    document.getElementById('invDetailOv').classList.remove('open');
+    renderInvestments();
+    toast('🗑 Investment deleted','info');
+  } catch(e) { toast('⚠️ '+e.message,'err'); }
+}
+
+// ═══════════════════════ ACCOUNT STATEMENT ═══════════════════════
+let accTab = 'overview';
+
+function setAccTab(t) {
+  accTab = t;
+  document.getElementById('accTab0').className = 'dvbtn' + (t==='overview'  ?' on':'');
+  document.getElementById('accTab1').className = 'dvbtn' + (t==='statement' ?' on':'');
+  document.getElementById('accOverview').style.display   = t==='overview'  ? 'block' : 'none';
+  document.getElementById('accStatement').style.display  = t==='statement' ? 'block' : 'none';
+  if (t==='statement') initStatement();
+}
+
+function initStatement() {
+  // Populate account selector
+  const sel = document.getElementById('stmtAcc');
+  sel.innerHTML = '<option value="">— Select Account —</option>'
+    + S.payments.map(p=>`<option value="${esc(p.id)}">${p.icon||'🏦'} ${p.name}</option>`).join('');
+  // Default to current month
+  const now = new Date();
+  document.getElementById('stmtMonth').value = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  renderStatement();
+}
+
+function renderStatement() {
+  const pmId    = document.getElementById('stmtAcc').value;
+  const monthVal= document.getElementById('stmtMonth').value; // YYYY-MM
+  const el      = document.getElementById('stmtList');
+  if (!pmId || !monthVal) { el.innerHTML=''; return; }
+
+  const pm = S.payments.find(p=>p.id===pmId);
+  const [yr, mo] = monthVal.split('-').map(Number);
+
+  // All txns for this account in this month (include transfers)
+  const txs = S.transactions.filter(t => {
+    if (t.paymentMode !== pm.name && t.paymentMode !== pm.id) return false;
+    if (t.type === 'transfer-in' && pm.accType === 'cc') return false; // skip for CC
+    try {
+      const d = new Date(t.date);
+      return d.getFullYear()===yr && d.getMonth()+1===mo;
+    } catch { return false; }
+  }).sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+  if (!txs.length) {
+    el.innerHTML=`<div class="empty"><div class="empty-ico">📋</div>
+      <div class="empty-nm">No transactions</div>
+      <div>${pm.name} had no activity in ${new Date(yr,mo-1,1).toLocaleString('en-IN',{month:'long',year:'numeric'})}</div></div>`;
+    return;
+  }
+
+  // Compute totals
+  const credits = txs.filter(t=>t.type==='income'||t.type==='transfer-in').reduce((a,t)=>a+t.amount,0);
+  const debits  = txs.filter(t=>t.type==='expense'||t.type==='transfer-out'||t.type==='cc-payment').reduce((a,t)=>a+t.amount,0);
+  const netFlow = credits - debits;
+
+  const typeIcon = { income:'💰', expense:'📤', 'transfer-out':'⇄', 'transfer-in':'⇄', 'cc-payment':'💳' };
+  const typeColor= { income:'var(--gn)', expense:'var(--ac2)', 'transfer-out':'var(--yw)', 'transfer-in':'var(--yw)', 'cc-payment':'#ff8c42' };
+  const typeSign = { income:'+', expense:'-', 'transfer-out':'-', 'transfer-in':'+', 'cc-payment':'-' };
+
+  let html = `<div class="stmt-summary">
+    <div class="stmt-sum-cell"><div class="stmt-sum-lbl">Credits</div><div class="stmt-sum-val cg">₹${fmt(credits)}</div></div>
+    <div class="stmt-sum-cell"><div class="stmt-sum-lbl">Debits</div><div class="stmt-sum-val cr">₹${fmt(debits)}</div></div>
+    <div class="stmt-sum-cell"><div class="stmt-sum-lbl">Net</div><div class="stmt-sum-val" style="color:${netFlow>=0?'var(--gn)':'var(--ac2)'}">₹${fmt(netFlow)}</div></div>
+  </div>
+  <div class="stmt-card">
+    <div class="stmt-head">
+      <span style="font-family:'Syne',sans-serif;font-weight:700">${pm.icon||'🏦'} ${pm.name}</span>
+      <span style="font-size:12px;color:var(--mt)">${txs.length} transactions</span>
+    </div>
+    ${txs.map(t=>{
+      const cat = S.categories[t.majorCategory];
+      const ico = typeIcon[t.type]||'📦';
+      const col = typeColor[t.type]||'var(--mt)';
+      const sgn = typeSign[t.type]||'-';
+      const lbl = t.type==='income' ? (t.subCategory||t.majorCategory||'Income')
+                : t.type==='expense' ? (t.subCategory||t.majorCategory||'Expense')
+                : t.type==='transfer-out' ? 'Transfer Out'+(t.notes?' · '+t.notes:'')
+                : t.type==='transfer-in'  ? 'Transfer In'+(t.notes?' · '+t.notes:'')
+                : 'CC Payment'+(t.notes?' · '+t.notes:'');
+      return `<div class="stmt-row">
+        <div class="stmt-ico">${cat?.icon||ico}</div>
+        <div class="stmt-info">
+          <div class="stmt-nm">${lbl}</div>
+          <div class="stmt-dt">${fmtD(t.date)}${t.notes&&!t.type.startsWith('transfer')&&t.type!=='cc-payment'?' · '+t.notes:''}</div>
+        </div>
+        <div class="stmt-amt" style="color:${col}">${sgn}₹${fmt(t.amount)}</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+
+  el.innerHTML = html;
+}
 
 // ═══════════════════════ PARTIES ═══════════════════════
 // S.parties = [ { id, name, icon, entries:[ {id,type:'gave'|'got',amount,date,note} ] } ]
