@@ -2353,14 +2353,23 @@ function renderAccounts() {
   const ccCards   = S.payments.filter(p => p.accType === 'cc');
   const totalLiq  = liquid.reduce((a,p) => a + accBalance(p), 0);
 
-  // CC outstanding = sum of current cycle expenses minus payments made this cycle
-  const totalCCDue = ccCards.reduce((a, pm) => {
+  // CC total due = current cycle spend + unpaid previous cycle balance (per card)
+  let totalCurCycle = 0, totalPrevUnpaid = 0;
+  ccCards.forEach(pm => {
     const billDay = parseInt(pm.ccBillDay) || 1;
+    // Current cycle
     const { cycleStart, cycleEnd } = getCurrentCycle(billDay);
-    const spent = ccTxsInRange(pm, cycleStart, cycleEnd).reduce((s,t)=>s+t.amount,0);
-    return a + spent;
-  }, 0);
-  const totalLimit = ccCards.reduce((a,p) => a+(parseFloat(p.ccLimit)||0), 0);
+    const curSpent = ccTxsInRange(pm, cycleStart, cycleEnd).reduce((s,t)=>s+t.amount,0);
+    totalCurCycle += curSpent;
+    // Previous cycle unpaid
+    const { prevStart, prevEnd } = getPrevCycle(billDay);
+    const prevSpent2 = ccTxsInRange(pm, prevStart, prevEnd).reduce((s,t)=>s+t.amount,0);
+    const prevPaid2  = ccPaymentsInRange(pm, prevEnd, now);
+    const prevUnpaid = Math.max(0, prevSpent2 - prevPaid2); // only positive (unpaid portion)
+    totalPrevUnpaid += prevUnpaid;
+  });
+  const totalCCDue  = totalCurCycle + totalPrevUnpaid;
+  const totalLimit  = ccCards.reduce((a,p) => a+(parseFloat(p.ccLimit)||0), 0);
 
   // ── Summary card ──
   let html = `<div class="acc-total-card">
@@ -2370,7 +2379,11 @@ function renderAccounts() {
     </div>
     <div class="acc-total-row">
       <div class="acc-total-cell"><div class="acc-total-cell-lbl">Liquid</div><div class="acc-total-cell-val cg">₹${fmt(totalLiq)}</div></div>
-      <div class="acc-total-cell"><div class="acc-total-cell-lbl">CC Due</div><div class="acc-total-cell-val cr">₹${fmt(totalCCDue)}</div></div>
+      <div class="acc-total-cell">
+        <div class="acc-total-cell-lbl">CC Due</div>
+        <div class="acc-total-cell-val cr">₹${fmt(totalCCDue)}</div>
+        ${totalPrevUnpaid>0?`<div style="font-size:9px;color:var(--yw);margin-top:2px">incl. ₹${fmt(totalPrevUnpaid)} prev unpaid</div>`:''}
+      </div>
       <div class="acc-total-cell"><div class="acc-total-cell-lbl">CC Limit</div><div class="acc-total-cell-val cy">₹${fmt(totalLimit)}</div></div>
     </div>
   </div>`;
