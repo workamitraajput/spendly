@@ -763,6 +763,10 @@
       <input class="inp" id="ptyAmt" type="number" inputmode="decimal" placeholder="0"/>
       <label class="lbl">Date</label>
       <input class="inp" id="ptyDate" type="date"/>
+      <label class="lbl">Paid via (optional — adjusts account balance)</label>
+      <select class="inp" id="ptyPayMode" style="margin-bottom:14px">
+        <option value="">— Not linked —</option>
+      </select>
       <label class="lbl">Note (optional)</label>
       <input class="inp" id="ptyNote" placeholder="e.g. dinner, rent, loan"/>
       <button class="sbtn" onclick="addPartyEntry()">Add Entry</button>
@@ -3051,6 +3055,10 @@ function openPartyDetail(id) {
   document.getElementById('ptyDate').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
   document.getElementById('ptyAmt').value = '';
   document.getElementById('ptyNote').value = '';
+  // Populate payment mode selector
+  const ptySel = document.getElementById('ptyPayMode');
+  ptySel.innerHTML = '<option value="">— Not linked —</option>'
+    + S.payments.map(p => `<option value="${esc(p.id)}">${p.icon||'💳'} ${p.name}</option>`).join('');
   renderPartyDetail();
   document.getElementById('ptyDetailOv').classList.add('open');
 }
@@ -3087,11 +3095,19 @@ function renderPartyDetail() {
       const isGave = e.type === 'gave';
       const col2 = isGave ? 'var(--ac2)' : 'var(--gn)';
       const sign = isGave ? '-' : '+';
+      // Find matching transaction for this entry (same amount, date, party subCategory)
+      const matchTx = S.transactions.find(t =>
+        t.majorCategory === 'Party' &&
+        t.subCategory === p.name &&
+        t.amount === e.amount &&
+        Math.abs(new Date(t.date) - new Date(e.date)) < 86400000
+      );
+      const linkedPm = matchTx ? S.payments.find(pm => pm.name === matchTx.paymentMode) : null;
       return `<div class="ptx">
         <div class="ptx-dot" style="background:${col2}"></div>
         <div class="ptx-info">
           <div class="ptx-nm">${isGave ? 'You gave' : 'You received'}${e.note ? ' · ' + e.note : ''}</div>
-          <div class="ptx-dt">${fmtD(e.date)}</div>
+          <div class="ptx-dt">${fmtD(e.date)}${linkedPm ? ' · ' + (linkedPm.icon||'💳') + ' ' + linkedPm.name : ''}</div>
         </div>
         <div style="text-align:right;flex-shrink:0">
           <div class="ptx-amt" style="color:${col2}">${sign}₹${fmt(e.amount)}</div>
@@ -3108,20 +3124,69 @@ function setPtyType(t) {
 }
 
 async function addPartyEntry() {
-  const amt = parseFloat(document.getElementById('ptyAmt').value);
+  const amt    = parseFloat(document.getElementById('ptyAmt').value);
   if (!amt || amt <= 0) { toast('Enter an amount', 'err'); return; }
-  const date = document.getElementById('ptyDate').value || new Date().toISOString().slice(0,10);
-  const note = document.getElementById('ptyNote').value.trim();
+  const date   = document.getElementById('ptyDate').value || new Date().toISOString().slice(0,10);
+  const note   = document.getElementById('ptyNote').value.trim();
+  const pmId   = document.getElementById('ptyPayMode').value;
+  const pm     = pmId ? S.payments.find(p => p.id === pmId) : null;
+  const party  = S.parties.find(x => x.id === curPartyId);
+  const dateISO = new Date(date + 'T12:00:00').toISOString();
+
   try {
+    // 1. Save party entry
     const r = await API({ action:'addPartyEntry', partyId:curPartyId, type:ptyEntryType, amount:amt, date, note });
     if (!r.ok) throw new Error(r.error || 'Failed');
-    const p = S.parties.find(x => x.id === curPartyId);
-    p.entries.push({ id: r.id, type: ptyEntryType, amount: amt, date: date+'T12:00:00.000Z', note });
-    document.getElementById('ptyAmt').value = '';
+    party.entries.push({ id:r.id, type:ptyEntryType, amount:amt, date:dateISO, note });
+
+    // 2. If payment mode linked — create bank/CC transaction to adjust balance
+    if (pm) {
+      const partyName = party.name;
+      const txNote    = note ? `${partyName} — ${note}` : partyName;
+
+      if (ptyEntryType === 'gave') {
+        // I gave money → debit from my account (expense/transfer-out)
+        const txType = pm.accType === 'cc' ? 'expense' : 'transfer-out';
+        const r2 = await API({
+          action:'addTransaction', date:dateISO,
+          type:txType,
+          majorCategory:'Party', subCategory:partyName,
+          paymentMode:pm.name, amount:amt, notes:txNote
+        });
+        if (r2.ok) S.transactions.unshift({
+          id:r2.id, date:dateISO, type:txType,
+          majorCategory:'Party', subCategory:partyName,
+          paymentMode:pm.name, amount:amt, notes:txNote
+        });
+      } else {
+        // I received money → credit to my account (income/transfer-in)
+        const txType = pm.accType === 'cc' ? 'cc-payment' : 'transfer-in';
+        const r2 = await API({
+          action:'addTransaction', date:dateISO,
+          type:txType,
+          majorCategory:'Party', subCategory:partyName,
+          paymentMode:pm.name, amount:amt, notes:txNote
+        });
+        if (r2.ok) S.transactions.unshift({
+          id:r2.id, date:dateISO, type:txType,
+          majorCategory:'Party', subCategory:partyName,
+          paymentMode:pm.name, amount:amt, notes:txNote
+        });
+      }
+    }
+
+    document.getElementById('ptyAmt').value  = '';
     document.getElementById('ptyNote').value = '';
+    document.getElementById('ptyPayMode').value = '';
     renderPartyDetail();
     renderParties();
-    toast(ptyEntryType==='gave' ? '💸 Entry added — you gave' : '💰 Entry added — you received', 'ok');
+    renderBal();
+    if (curTab === 'acc') renderAccounts();
+
+    const pmMsg = pm ? ` via ${pm.icon||''}${pm.name}` : '';
+    toast(ptyEntryType==='gave'
+      ? `💸 Gave ₹${fmt(amt)}${pmMsg} — balance adjusted`
+      : `💰 Received ₹${fmt(amt)}${pmMsg} — balance adjusted`, 'ok');
   } catch(e) { toast('⚠️ ' + e.message, 'err'); }
 }
 
