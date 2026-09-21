@@ -2343,11 +2343,21 @@ function renderAccounts() {
   // CC payments received in a range
   function ccPaymentsInRange(pm, from, to) {
     return S.transactions.filter(t => {
+      // Accept transfer-in (payment received on CC) or cc-payment recorded directly on CC
       if (t.type !== 'cc-payment' && t.type !== 'transfer-in') return false;
+      // Match by name or id — payment on CC account
       if (t.paymentMode !== pm.name && t.paymentMode !== pm.id) return false;
       const d = new Date(t.date);
       return d >= from && d <= to;
     }).reduce((a,t) => a+t.amount, 0);
+  }
+
+  // Also compute total ever paid on CC (for carrying forward multi-cycle)
+  function totalCCPaidEver(pm) {
+    return S.transactions.filter(t =>
+      (t.type === 'transfer-in' || t.type === 'cc-payment') &&
+      (t.paymentMode === pm.name || t.paymentMode === pm.id)
+    ).reduce((a,t) => a+t.amount, 0);
   }
 
   const now = new Date();
@@ -2357,19 +2367,21 @@ function renderAccounts() {
   const ccCards   = S.payments.filter(p => p.accType === 'cc');
   const totalLiq  = liquid.reduce((a,p) => a + accBalance(p), 0);
 
-  // CC total due = current cycle spend + unpaid previous cycle balance (per card)
+  // CC total due = total ever spent - total ever paid (true outstanding balance)
   let totalCurCycle = 0, totalPrevUnpaid = 0;
   ccCards.forEach(pm => {
     const billDay = parseInt(pm.ccBillDay) || 1;
-    // Current cycle
     const { cycleStart, cycleEnd } = getCurrentCycle(billDay);
-    const curSpent = ccTxsInRange(pm, cycleStart, cycleEnd).reduce((s,t)=>s+t.amount,0);
-    totalCurCycle += curSpent;
-    // Previous cycle unpaid
-    const { prevStart, prevEnd } = getPrevCycle(billDay);
-    const prevSpent2 = ccTxsInRange(pm, prevStart, prevEnd).reduce((s,t)=>s+t.amount,0);
-    const prevPaid2  = ccPaymentsInRange(pm, prevEnd, now);
-    const prevUnpaid = Math.max(0, prevSpent2 - prevPaid2); // only positive (unpaid portion)
+    // Current cycle spend
+    const curSpent   = ccTxsInRange(pm, cycleStart, cycleEnd).reduce((s,t)=>s+t.amount,0);
+    totalCurCycle   += curSpent;
+    // True previous outstanding = all historical spend before this cycle - all payments ever made
+    const allSpend   = S.transactions.filter(t =>
+      t.type==='expense' && (t.paymentMode===pm.name||t.paymentMode===pm.id) &&
+      new Date(t.date) < cycleStart
+    ).reduce((a,t)=>a+t.amount,0);
+    const allPaid    = totalCCPaidEver(pm);
+    const prevUnpaid = Math.max(0, allSpend - allPaid);
     totalPrevUnpaid += prevUnpaid;
   });
   const totalCCDue  = totalCurCycle + totalPrevUnpaid;
@@ -2445,7 +2457,8 @@ function renderAccounts() {
     const { prevStart, prevEnd } = getPrevCycle(billDay);
     const prevTxs    = ccTxsInRange(pm, prevStart, prevEnd);
     const prevSpent  = prevTxs.reduce((a,t) => a+t.amount, 0);
-    const prevPaid   = ccPaymentsInRange(pm, prevEnd, now);
+    const payFrom2   = new Date(prevEnd); payFrom2.setDate(payFrom2.getDate() - 30);
+    const prevPaid   = ccPaymentsInRange(pm, payFrom2, now);
     const prevBalance= prevSpent - prevPaid;
 
     // Due date calculation
